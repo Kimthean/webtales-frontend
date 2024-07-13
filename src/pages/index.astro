@@ -1,16 +1,28 @@
 ---
-import Footer from "@components/Footer.astro"
-import Header from "@components/Header.astro"
-import Hr from "@components/Hr.astro"
-import NovelCard from "@components/NovelCard.astro"
-import Layout from "@layouts/Layout.astro"
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import NovelCard from "@components/NovelCard.astro";
+import Layout from "@layouts/Layout.astro";
+
+const API_URL = import.meta.env.PUBLIC_API_URL;
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+async function fetchNovels() {
+  return await fetch(`${API_URL}/novels`).then(res => res.json());
+}
+
+const novels = await fetchNovels();
 ---
+
 <Layout>
-	<Header activeNav="novels" />
-	<main>
-<div class="flex items-center justify-center pt-12">
-	<NovelCard/>
-</div>
-	</main>
-	<Footer />
+  <Header activeNav="novels" />
+  <main>
+    <div class="flex flex-col items-center justify-center py-12">
+      <NovelCard novels={novels} />
+    </div>
+  </main>
+  <Footer />
 </Layout>
