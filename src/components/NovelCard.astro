@@ -1,28 +1,39 @@
 ---
-import  BackgroundGradient  from "./BackgroundGradient.astro";
+const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 ---
 
-<BackgroundGradient className="rounded-[22px] max-w-sm p-4 sm:p-10 bg-white dark:bg-zinc-900" containerClassName="max-w-sm mx-auto">
-  <img
-          src={`/jordans.webp`}
-          alt="jordans"
-          height="400"
-          width="400"
-          class="object-contain"
-        />
-        <p class="text-base sm:text-xl">
-          Air Jordan 4 Retro Reimagined
-        </p>
- 
-        <p class="text-sm ">
-          The Air Jordan 4 Retro Reimagined Bred will release on Saturday,
-          February 17, 2024. Your best opportunity to get these right now is by
-          entering raffles and waiting for the official releases.
-        </p>
-        <button class="rounded-full pl-4 pr-1 py-1 flex items-center space-x-1 bg-black mt-4 text-xs font-bold dark:bg-zinc-800">
-          <span>Buy now </span>
-          <span class="bg-zinc-700 rounded-full text-[0.6rem] px-2 py-0 ">
-            $100
-          </span>
-        </button>
-</BackgroundGradient>
+<div class="lg:px-8 mx-auto grid max-w-3xl grid-cols-1 gap-6 px-4 sm:px-6">
+  {
+    novels.map(novel => (
+      <a
+        href={`/novel/${novel.ID}`}
+        class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-xl"
+      >
+        <div class="flex flex-col sm:flex-row">
+          <img
+            class="h-48 w-full object-contain sm:h-auto sm:w-48"
+            src={novel.thumbnail}
+            alt={novel.title}
+            width="200"
+            height="200"
+          />
+          <div class="flex flex-grow flex-col justify-between p-4">
+            <div class="flex-grow">
+              <h2 class="mb-2 font-bold text-skin-base sm:text-xl">
+                {novel.title}
+              </h2>
+              <div class="relative">
+                <p class="line-clamp-3 text-sm text-skin-base sm:line-clamp-5">
+                  {novel.description}
+                </p>
+              </div>
+            </div>
+            <p class="mt-2 text-sm text-skin-base opacity-80 sm:mt-auto">
+              Author: {novel.author}
+            </p>
+          </div>
+        </div>
+      </a>
+    ))
+  }
+</div>
