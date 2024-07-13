@@ -1,0 +1,32 @@
+---
+import ChapterLayout from "@layouts/ChapterLayout.astro";
+
+
+export const prerender = false;
+
+const { id, number } = Astro.params;
+const API_URL = import.meta.env.PUBLIC_API_URL;
+
+const getChapterData = async (id: string | undefined) => {
+  const res = await fetch(`${API_URL}/novels/${id}/chapters/${number}`);
+  if (!res.ok) {
+    return null;
+  }
+  return await res.json();
+};
+
+const chapter = await getChapterData(id);
+
+const paragraphs = chapter.translated_content.split('\n\n').filter((p: string) => p.trim() !== '');
+---
+
+<ChapterLayout>
+  <div class="container mx-auto max-w-3xl px-4 py-8">
+    <h1 class="text-xl sm:text-3xl font-bold mb-6">{chapter.translated_title}</h1>
+    <div class="space-y-4">
+      {paragraphs.map((paragraph: string) => (
+        <p class="sm:text-lg leading-relaxed text-pretty">{paragraph}</p>
+      ))}
+    </div>
+  </div>
+</ChapterLayout>

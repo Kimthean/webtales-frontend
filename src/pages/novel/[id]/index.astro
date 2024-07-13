@@ -1,0 +1,115 @@
+---
+import Header from "@components/Header.astro";
+import Hr from "@components/Hr.astro";
+import Layout from "@layouts/Layout.astro";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+const API_URL = import.meta.env.PUBLIC_API_URL;
+
+const getNovelData = async (id: string | undefined) => {
+  const res = await fetch(`${API_URL}/novels/${id}`);
+  if (!res.ok) {
+    return null;
+  }
+  return await res.json();
+};
+
+const novel = await getNovelData(id);
+
+if (!novel) {
+  return Astro.redirect("/404");
+}
+
+const getChaptersData = async (id: string | undefined) => {
+  const res = await fetch(`${API_URL}/novels/${id}/chapters`);
+  if (!res.ok) {
+    return [];
+  }
+  return await res.json();
+};
+
+const chapters = await getChaptersData(id);
+---
+
+<Layout>
+  <Header activeNav="novels" />
+  <div class="container mx-auto max-w-3xl px-4 py-8">
+    <div class="lg:grid-cols-3 grid grid-cols-1 gap-8">
+      <div class="lg:col-span-2">
+        <img
+          class="mx-auto w-52 max-w-sm rounded-lg object-cover shadow-lg sm:h-auto sm:w-full"
+          src={novel.thumbnail}
+          alt={novel.title}
+        />
+        <h1 class="mb-2 mt-6 text-2xl font-bold text-skin-base sm:text-4xl">
+          {novel.title}
+        </h1>
+        <p class="sm:text-2xl mb-2">{novel.raw_title}</p>
+        <p class="mb-4 text-lg text-skin-base opacity-80 sm:text-xl">
+          Author: {novel.author}
+        </p>
+        <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
+          <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
+            Description
+          </h2>
+          <p class="text-sm text-skin-base sm:text-base">{novel.description}</p>
+        </div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
+          <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
+            Chapters
+          </h2>
+          <div class="h-96 overflow-y-auto pr-2 sm:h-96 sm:pr-4">
+            <ul class="space-y-2">
+              {
+                chapters.map(
+                  (chapter: { translated_title: string; Number: string }) => (
+                    <li>
+                      <a
+                        href={`/novel/${id}/chapter/${chapter.Number}`}
+                        class="block rounded-md py-2 transition duration-150 ease-in-out hover:bg-skin-accent sm:p-3"
+                      >
+                        <span class="text-sm text-skin-base opacity-80 sm:text-base">
+                          {chapter.translated_title}
+                        </span>
+                      </a>
+                      <div class="pt-2 sm:px-3">
+                        <Hr noPadding={true} />
+                      </div>
+                    </li>
+                  )
+                )
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Custom scrollbar styles */
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: var(--color-fill);
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: var(--color-accent);
+    border-radius: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .overflow-y-auto::-webkit-scrollbar {
+      width: 8px;
+    }
+  }
+</style>

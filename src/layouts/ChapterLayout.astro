@@ -1,0 +1,33 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+
+---
+
+<Layout>
+  <div class="progress-container fixed top-0 left-0 z-10 h-1 w-full bg-skin-fill">
+    <div class="progress-bar h-1 w-0 bg-skin-accent" id="myBar"></div>
+  </div> 
+
+  <main class="mx-auto w-full max-w-3xl px-4 pb-8">
+    <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
+      <slot/>
+    </div>    
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  function updateScrollProgress() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    const myBar = document.getElementById("myBar");
+    if (myBar) {
+      myBar.style.width = scrolled + "%";
+    }
+  }
+  
+  document.addEventListener("scroll", updateScrollProgress);
+</script>
