@@ -33,37 +33,64 @@ import Footer from "@components/Footer.astro";
   <Footer />
 </Layout>
 
-<script>
+<script is:inline>
+
+  let isScrolling;
+
   function updateScrollProgress() {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (winScroll / height) * 100;
     const myBar = document.getElementById("myBar");
-    if (myBar) {
+    if (myBar && typeof myBar.style.width === 'string') {
       myBar.style.width = scrolled + "%";
     }
   }
 
+  function handleScroll() {
+    const goToTopButton = document.getElementById('goToTop');
+    const goToBottomButton = document.getElementById('goToBottom');
+
+    if (goToTopButton && goToBottomButton) {
+      goToTopButton.style.display = 'none';
+      goToBottomButton.style.display = 'none';
+    }
+
+    window.clearTimeout(isScrolling);
+
+    isScrolling = setTimeout(function() {
+      if (goToTopButton && goToBottomButton) {
+        goToTopButton.style.display = 'block';
+        goToBottomButton.style.display = 'block';
+      }
+    }, 250); 
+  }
+
   function initializeButtons() {
     const goToTopButton = document.getElementById('goToTop');
-    if (goToTopButton) {
+    const goToBottomButton = document.getElementById('goToBottom');
+
+    if (goToTopButton instanceof HTMLElement) {
       goToTopButton.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
 
-    const goToBottomButton = document.getElementById('goToBottom');
-    if (goToBottomButton) {
+    if (goToBottomButton instanceof HTMLElement) {
       goToBottomButton.addEventListener('click', () => {
         window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
       });
     }
   }
 
-
   initializeButtons();
+  document.addEventListener("astro:after-swap", () => {
+    initializeButtons();
+    updateScrollProgress(); 
+  });
 
-  document.addEventListener("astro:after-swap", initializeButtons);
-
-  document.addEventListener("scroll", updateScrollProgress);
+  document.addEventListener("scroll", () => {
+    updateScrollProgress();
+    handleScroll(); 
+  });
 </script>
