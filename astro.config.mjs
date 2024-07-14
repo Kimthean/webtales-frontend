@@ -9,7 +9,8 @@ export default defineConfig({
   output: "server",
   adapter: vercel(),
   image: {
-  domains: ['http://img.9999txt.cc'],
+    remotePatterns: [{ protocol: "http", hostname: "img.9999txt.cc" }],
+      domains: ['img.9999txt.cc'],
   },
   vite: {
     ssr: {
