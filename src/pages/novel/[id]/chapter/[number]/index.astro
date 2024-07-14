@@ -2,7 +2,7 @@
 import ChapterLayout from "@layouts/ChapterLayout.astro";
 
 
-export const prerender = false;
+export const prerender = true;
 
 const { id, number } = Astro.params;
 const API_URL = import.meta.env.PUBLIC_API_URL;
