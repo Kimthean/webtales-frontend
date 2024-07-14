@@ -8,7 +8,6 @@ const API_URL = import.meta.env.PUBLIC_API_URL;
 
 export const prerender = false;
 
-const { id } = Astro.params;
 
 async function fetchNovels() {
   return await fetch(`${API_URL}/novels`).then(res => res.json());

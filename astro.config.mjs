@@ -9,6 +9,9 @@ export default defineConfig({
   scopedStyleStrategy: "where",
   output: "hybrid",
   adapter: vercel(),
+  image: {
+  domains: ['http://img.9999txt.cc'],
+  },
   vite: {
     ssr: {
       external: ['@11ty/eleventy-img', 'svgo']
