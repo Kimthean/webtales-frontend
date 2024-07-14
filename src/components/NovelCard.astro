@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 ---
 
@@ -10,10 +12,11 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
         class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-xl"
       >
         <div class="flex flex-col sm:flex-row">
-          <img
+          <Image
             class="h-48 w-full object-contain sm:h-auto sm:w-48"
             src={novel.thumbnail}
             alt={novel.title}
+            inferSize
             width="200"
             height="200"
           />
