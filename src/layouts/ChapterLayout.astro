@@ -16,6 +16,20 @@ import Footer from "@components/Footer.astro";
       <slot/>
     </div>    
   </main>
+  <div class="fixed right-4 bottom-32 flex flex-col space-y-2">
+    <button id="goToTop" class="p-2 bg-skin-fill rounded-full shadow-lg opacity-50 transition-opacity" aria-label="Go to top">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+    <button id="goToBottom" class="p-2 bg-skin-fill rounded-full shadow-lg opacity-50 transition-opacity" aria-label="Go to bottom">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </button>
+  </div>
+
+
   <Footer />
 </Layout>
 
@@ -31,4 +45,20 @@ import Footer from "@components/Footer.astro";
   }
   
   document.addEventListener("scroll", updateScrollProgress);
+
+
+  const goToTopButton = document.getElementById('goToTop');
+  if (goToTopButton) {
+    goToTopButton.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+
+  const goToBottomButton = document.getElementById('goToBottom');
+  if (goToBottomButton) {
+    goToBottomButton.addEventListener('click', () => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    });
+  }
 </script>
