@@ -25,7 +25,7 @@ const paragraphs = chapter.translated_content.split('\n\n').filter((p: string) =
     <h1 class="text-xl sm:text-3xl font-bold mb-6">{chapter.translated_title}</h1>
     <div class="space-y-4">
       {paragraphs.map((paragraph: string) => (
-        <p class="sm:text-lg leading-relaxed text-pretty">{paragraph}</p>
+        <p class="sm:text-lg leading-relaxed text-pretty overflow-x-hidden">{paragraph}</p>
       ))}
     </div>
   </div>
