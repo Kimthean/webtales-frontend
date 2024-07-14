@@ -8,7 +8,7 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
   {
     novels.map(novel => (
       <a
-        href={`/novel/${novel.ID}`}
+        href={`/novel/${novel.id}`}
         class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-xl"
       >
         <div class="flex flex-col sm:flex-row">
