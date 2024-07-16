@@ -25,5 +25,6 @@ export default defineConfig({
     ssr: {
       external: ['@11ty/eleventy-img', 'svgo']
     }
-  }
+  },
+  trailingSlash: 'always',
 });
