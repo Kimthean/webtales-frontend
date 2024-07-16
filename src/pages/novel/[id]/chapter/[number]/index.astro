@@ -25,7 +25,7 @@ const chapter = await getChapterData(id, number);
 const chapterStats = await getChapterStats(id);
 
 if (!chapter || !chapterStats) {
-  return Astro.redirect('/error'); // Redirect to an error page if data fetch fails
+  return Astro.redirect('/error');
 }
 
 const currentChapter = parseInt(number as string);
@@ -89,3 +89,4 @@ const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
     </div>
   </div>
 </ChapterLayout>
+

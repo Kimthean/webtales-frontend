@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
+
+
 ---
 
 <div class="lg:px-8 mx-auto grid max-w-3xl grid-cols-1 gap-6 px-4 sm:px-6">
@@ -12,14 +14,16 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
         class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-xl"
       >
         <div class="flex flex-col sm:flex-row">
-          <Image
-            class="h-48 w-full object-contain sm:h-auto sm:w-48"
-            src={novel.thumbnail}
-            alt={novel.title}
-            inferSize
-            width="200"
-            height="200"
-          />
+          {novel.thumbnail && (
+            <Image
+              class="h-48 w-full object-contain sm:h-auto sm:w-48"
+              src={novel.thumbnail}
+              alt={novel.title}
+              width={200}
+              height={200}
+            />
+          )}
+   
           <div class="flex flex-grow flex-col justify-between p-4">
             <div class="flex-grow">
               <h2 class="mb-2 font-bold text-skin-base sm:text-xl">

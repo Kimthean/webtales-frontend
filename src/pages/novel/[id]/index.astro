@@ -39,12 +39,15 @@ const chapters = await getChaptersData(id);
   <div class="container mx-auto max-w-3xl px-4 py-8">
     <div class="lg:grid-cols-3 grid grid-cols-1 gap-8">
       <div class="lg:col-span-2">
-        <Image
-          class="mx-auto w-52 max-w-sm rounded-lg object-cover shadow-lg sm:h-auto sm:w-full"
-          inferSize
-          src={novel.thumbnail}
-          alt={novel.title}
-        />
+        {novel.thumbnail && (
+          <Image
+            class="mx-auto w-52 max-w-sm rounded-lg object-cover shadow-lg sm:h-auto sm:w-full"
+            width={200}
+            height={200}
+            src={novel.thumbnail}
+            alt={novel.title}
+          />
+        )}
         <h1 class="mb-2 mt-6 text-2xl font-bold text-skin-base sm:text-4xl">
           {novel.title}
         </h1>
