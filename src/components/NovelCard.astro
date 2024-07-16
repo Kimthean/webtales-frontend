@@ -35,8 +35,8 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
                 </p>
               </div>
             </div>
-            <p class="text-xs text-skin-base opacity-65">Total Chapters: {novel.total_chapters_count}</p>
-            <p class="mt-2 text-sm text-skin-base opacity-80 sm:mt-auto">
+            <p class="text-xs text-skin-base opacity-65 max-sm:pt-4 sm:pb-2">Total Chapters: {novel.total_chapters_count} Chapters</p>
+            <p class="text-sm text-skin-base opacity-80 sm:mt-auto">
               Author: {novel.author}
             </p>
           </div>
