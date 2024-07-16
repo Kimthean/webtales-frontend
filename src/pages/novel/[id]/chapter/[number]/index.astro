@@ -35,6 +35,10 @@ const paragraphs = chapter.translated_content.split('\n\n').filter((p: string) =
 
 const prevChapter = currentChapter > 1 ? currentChapter - 1 : null;
 const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
+
+const prevChapterUrl = prevChapter ? `/novel/${id}/chapter/${prevChapter}` : null;
+const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}` : null;
+
 ---
 
 <ChapterLayout>
@@ -54,15 +58,13 @@ const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
     
     <div class="flex justify-between items-center mt-8">
       <LinkButton
-        href={prevChapter ? `/novel/${id}/chapter/${prevChapter}` : "#"}
+        href={prevChapterUrl || "#"}
         className="font-bold py-2 px-2 sm:px-4 border hover:border-skin-line rounded text-sm sm:text-base"
         disabled={!prevChapter}
         ariaLabel={prevChapter ? "Go to previous chapter" : "No previous chapter"}
       >
         {prevChapter ? (
-          <>
-            <span >Previous Chapter</span>
-          </>
+          <span>Previous Chapter</span>
         ) : (
           <span>First Chapter</span>
         )}
@@ -73,20 +75,33 @@ const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
       </span>
       
       <LinkButton
-        href={nextChapter ? `/novel/${id}/chapter/${nextChapter}` : "#"}
+        href={nextChapterUrl || "#"}
         className="font-bold py-2 px-2 sm:px-4 border hover:border-skin-line rounded text-sm sm:text-base"
         disabled={!nextChapter}
         ariaLabel={nextChapter ? "Go to next chapter" : "No next chapter"}
       >
         {nextChapter ? (
-          <>
-            <span >Next Chapter</span>
-          </>
+          <span>Next Chapter</span>
         ) : (
           <span>Last Chapter</span>
         )}
       </LinkButton>
     </div>
   </div>
+  <script define:vars={{ prevChapterUrl, nextChapterUrl }}>
+    function handleKeyPress(event) {
+      if (event.key === 'ArrowLeft' && prevChapterUrl) {
+        window.location.href = prevChapterUrl;
+      } else if (event.key === 'ArrowRight' && nextChapterUrl) {
+        window.location.href = nextChapterUrl;
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    document.addEventListener('astro:before-swap', () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    });
+  </script>
 </ChapterLayout>
 

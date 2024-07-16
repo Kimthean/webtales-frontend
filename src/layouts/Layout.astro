@@ -1,6 +1,28 @@
 ---
 import "@styles/base.css";
 import { ViewTransitions } from "astro:transitions";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const { 
+  title = "Webtales",
+  description = "Your MTL Novels Sources",
+  image = "/noise.jpeg",
+  canonicalURL = Astro.url.pathname,
+} = Astro.props;
+
+function getAbsoluteURL(path: string): string {
+  const baseURL = import.meta.env.SITE || 'https://example.com/';
+  return new URL(path, baseURL).toString();
+}
+
+const pageURL = getAbsoluteURL(canonicalURL);
+const ogImage = image.startsWith('http') ? image : getAbsoluteURL(image);
 ---
 
 <!doctype html>
@@ -10,7 +32,24 @@ import { ViewTransitions } from "astro:transitions";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={pageURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={pageURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
