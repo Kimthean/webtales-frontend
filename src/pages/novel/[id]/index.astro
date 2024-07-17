@@ -65,17 +65,16 @@ const description = novel.description.slice(0, 160);
           <p class="text-sm text-skin-base sm:text-base">{novel.description}</p>
         </div>
       </div>
-      <div class="lg:col-span-1">
-        <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
+      <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
           <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
             Chapters
           </h2>
-          <div class="h-96 overflow-y-auto pr-2 sm:h-96 sm:pr-4">
+          <div class="h-[500px] overflow-y-auto sm:h-96">
             <ul class="space-y-2">
               {
                 chapters.map(
                   (chapter: { translated_title: string; Number: string }) => (
-                    <li>
+                    <li class="w-full">
                       <a
                         href={`/novel/${id}/chapter/${chapter.Number}`}
                         class="block rounded-md py-2 transition duration-150 ease-in-out hover:bg-skin-accent sm:p-3"
@@ -88,11 +87,8 @@ const description = novel.description.slice(0, 160);
                         <Hr noPadding={true} />
                       </div>
                     </li>
-                  )
-                )
-              }
+                  ))}
             </ul>
-          </div>
         </div>
       </div>
     </div>
