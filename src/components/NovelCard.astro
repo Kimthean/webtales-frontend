@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 
 
+
 ---
 
 <div class="lg:px-8 mx-auto grid max-w-3xl grid-cols-1 gap-6 px-4 sm:px-6">
@@ -35,6 +36,9 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
                 </p>
               </div>
             </div>
+            {novel.status.status === "in_progress" ? 
+                <p class="text-xs max-sm:pt-4">Translation Status: In Progress}</p> 
+            : null}
             <p class="text-xs text-skin-base opacity-65 max-sm:pt-4 sm:pb-2">Total Chapters: {novel.total_chapters_count} Chapters</p>
             <p class="text-sm text-skin-base opacity-80 sm:mt-auto">
               Author: {novel.author}

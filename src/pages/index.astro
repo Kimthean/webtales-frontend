@@ -14,6 +14,18 @@ async function fetchNovels() {
 
 const novels = await fetchNovels();
 
+for (const novel of novels) {
+  const status = await fetchNovelStatus(novel);
+  novel.status = status;
+}
+
+async function fetchNovelStatus(novel: { ID: number; }) {
+  const response = await fetch(`${API_URL}/novels/chapters-stats/${novel.ID}`);
+  const status = await response.json();
+  return status;
+}
+
+
 ---
 
 <Layout>
