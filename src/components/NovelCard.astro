@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { Icon } from 'astro-icon/components'
 
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 
@@ -7,11 +8,11 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 
 ---
 
-<div class="lg:px-8 mx-auto grid max-w-3xl grid-cols-1 gap-6 px-4 sm:px-6">
+<div class="lg:px-8 mx-auto grid max-w-3xl grid-cols-1 gap-6">
   {novels.map(novel => (
       <a
         href={`/novel/${novel.ID}`}
-        class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-xl"
+        class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-2xl"
       >
         <div class="flex flex-col sm:flex-row">
           {novel.thumbnail && (
@@ -37,7 +38,7 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
             {novel.status.status === "in_progress" ? 
                 <p class="text-xs max-sm:pt-4">Translation Status: In Progress</p> 
             : null}
-            <p class="text-xs text-skin-base opacity-65 max-sm:pt-4 sm:pb-2">Total Chapters: {novel.total_chapters_count} Chapters</p>
+            <p class="text-xs text-skin-base max-sm:pt-4 sm:pb-2 items-center opacity-80"><Icon name="book" class="size-5" /> {novel.total_chapters_count} Chapters</p>
             <p class="text-sm text-skin-base opacity-80 sm:mt-auto">
               Author: {novel.author}
             </p>
