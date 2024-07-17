@@ -6,7 +6,9 @@ export default defineConfig({
   site: 'https://webtales-eight.vercel.app',
   integrations: [tailwind()],
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: { enabled: true }
+  }),
   image: {
     service: passthroughImageService(),
     domains: ['img.9999txt.cc'],
