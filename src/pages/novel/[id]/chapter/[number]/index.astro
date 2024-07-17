@@ -36,17 +36,47 @@ const paragraphs = chapter.translated_content.split('\n\n').filter((p: string) =
 const prevChapter = currentChapter > 1 ? currentChapter - 1 : null;
 const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
 
-const prevChapterUrl = prevChapter ? `/novel/${id}/chapter/${prevChapter}` : null;
-const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}` : null;
+const prevChapterUrl = prevChapter ? `/novel/${id}/chapter/${prevChapter}/` : null;
+const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}/` : null;
 
 ---
 
 <ChapterLayout>
   <div class="container mx-auto max-w-3xl py-8">
+    <div class="settings-panel mb-6">
+      <button id="toggleSettings" class="bg-skin-card hover:bg-skin-card-muted px-4 py-2 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+        </svg>
+        Settings
+      </button>
+      <div id="settingsMenu" class="hidden mt-4 p-6 bg-skin-card rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold mb-4">Reading Preferences</h3>
+        <div class="mb-4">
+          <label for="fontSize" class="block mb-2">Font Size: <span id="fontSizeValue">16px</span></label>
+          <input type="range" id="fontSize" min="12" max="24" value="16" class="w-full accent-skin-accent">
+        </div>
+        <div>
+          <label for="fontFamily" class="block mb-2">Font Family:</label>
+           <select id="fontFamily" class="w-full p-2 bg-skin-fill border border-skin-line rounded">
+            <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
+            <option value="'Roboto', sans-serif">Roboto</option>
+            <option value="'Open Sans', sans-serif">Open Sans</option>
+            <option value="'Lato', sans-serif">Lato</option>
+            <option value="'Merriweather', serif">Merriweather</option>
+            <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
+            <option value="'Nunito', sans-serif">Nunito</option>
+            <option value="'Ubuntu', sans-serif">Ubuntu</option>
+            <option value="'Fira Sans', sans-serif">Fira Sans</option>
+            <option value="'Noto Sans', sans-serif">Noto Sans</option>
+          </select>
+        </div>
+      </div>
+    </div>
     <h1 class="text-xl sm:text-3xl font-bold mb-6">{chapter.translated_title}</h1>
-    <div class="space-y-4 mb-8">
+    <div class="chapter-content space-y-4 mb-8">
       {paragraphs.map((paragraph: string) => (
-        <p class="sm:text-lg leading-relaxed text-pretty overflow-x-hidden">{paragraph}</p>
+        <p class="leading-relaxed text-pretty overflow-x-hidden">{paragraph}</p>
       ))}
     </div>
 
@@ -97,6 +127,54 @@ const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}` : nul
       }
     }
 
+const debounce = (func, delay) => {
+      let timeoutId;
+      return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func(...args), delay);
+      };
+    };
+
+    const updateStyles = debounce(() => {
+      const fontSize = document.getElementById('fontSize').value;
+      const fontFamily = document.getElementById('fontFamily').value;
+      document.documentElement.style.setProperty('--font-size', `${fontSize}px`);
+      document.documentElement.style.setProperty('--font-family', fontFamily);
+      document.getElementById('fontSizeValue').textContent = `${fontSize}px`;
+      
+      localStorage.setItem('readerFontSize', fontSize);
+      localStorage.setItem('readerFontFamily', fontFamily);
+
+      if (fontFamily !== "'IBM Plex Mono', monospace") {
+        const fontName = fontFamily.split(',')[0].replace(/'/g, '');
+        const link = document.createElement('link');
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(' ', '+')}&display=swap`;
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+      }
+    }, 300);
+
+    function loadPreferences() {
+      const fontSize = localStorage.getItem('readerFontSize') || '16';
+      const fontFamily = localStorage.getItem('readerFontFamily') || "'IBM Plex Mono', monospace";
+      
+      document.getElementById('fontSize').value = fontSize;
+      document.getElementById('fontFamily').value = fontFamily;
+      
+      updateStyles();
+    }
+
+    document.getElementById('fontSize').addEventListener('input', updateStyles);
+    document.getElementById('fontFamily').addEventListener('change', updateStyles);
+
+    document.getElementById('toggleSettings').addEventListener('click', () => {
+      const settingsMenu = document.getElementById('settingsMenu');
+      settingsMenu.classList.toggle('hidden');
+    });
+
+    // Load preferences when the page loads
+    loadPreferences();
+
     document.addEventListener('keydown', handleKeyPress);
 
     document.addEventListener('astro:before-swap', () => {
@@ -104,4 +182,17 @@ const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}` : nul
     });
   </script>
 </ChapterLayout>
+
+<style is:global>
+
+    :root {
+      --font-size: 16px;
+      --font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .chapter-content {
+      font-size: var(--font-size);
+      font-family: var(--font-family);
+    }
+  </style>
 
