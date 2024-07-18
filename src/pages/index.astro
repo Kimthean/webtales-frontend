@@ -31,11 +31,11 @@ async function fetchNovelStatus(novel: { ID: number; }) {
 <Layout>
   <Header activeNav="novels" />
   <main>
-    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4">
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-4">
       <p class="font-bold">Work in Progress</p>
       <p>Note: This content is currently under development and may contain errors or inconsistencies between novels.</p>
     </div>
-    <div class="flex flex-col items-center justify-center py-12">
+    <div class="flex flex-col py-12">
       <NovelCard novels={novels} />
     </div>
   </main>
