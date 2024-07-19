@@ -5,7 +5,10 @@ import LinkButton from "@components/LinkButton.astro";
 const { id, number } = Astro.params;
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
-const getChapterData = async (id: string | undefined, chapterNumber: string | undefined) => {
+const getChapterData = async (
+  id: string | undefined,
+  chapterNumber: string | undefined
+) => {
   const res = await fetch(`${API_URL}/novels/${id}/chapters/${chapterNumber}`);
   if (!res.ok) {
     return null;
@@ -25,46 +28,79 @@ const chapter = await getChapterData(id, number);
 const chapterStats = await getChapterStats(id);
 
 if (!chapter || !chapterStats) {
-  return Astro.redirect('/error');
+  return Astro.redirect("/error");
 }
 
 const currentChapter = parseInt(number as string);
 const totalChapters = chapterStats.total_chapters;
 
-const paragraphs = chapter.translated_content.split('\n\n').filter((p: string) => p.trim() !== '');
+const paragraphs = chapter.translated_content
+  .split("\n\n")
+  .filter((p: string) => p.trim() !== "");
 
 const prevChapter = currentChapter > 1 ? currentChapter - 1 : null;
 const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
 
-const prevChapterUrl = prevChapter ? `/novel/${id}/chapter/${prevChapter}/` : null;
-const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}/` : null;
-
+const prevChapterUrl = prevChapter
+  ? `/novel/${id}/chapter/${prevChapter}/`
+  : null;
+const nextChapterUrl = nextChapter
+  ? `/novel/${id}/chapter/${nextChapter}/`
+  : null;
 ---
 
 <ChapterLayout>
   <div class="container mx-auto max-w-3xl py-8">
     <div class="settings-panel mb-6">
-      <button id="toggleSettings" class="bg-skin-card hover:bg-skin-card-muted px-4 py-2 rounded-full shadow-2xl transition duration-300 ease-in-out transform hover:scale-105">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+      <button
+        id="toggleSettings"
+        class="transform rounded-full bg-skin-card px-4 py-2 shadow-2xl transition duration-300 ease-in-out hover:scale-105 hover:bg-skin-card-muted"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 inline-block h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+            clip-rule="evenodd"></path>
         </svg>
         Settings
       </button>
-      <div id="settingsMenu" class="hidden mt-4 p-6 bg-skin-card rounded-lg shadow-lg">
-        <h3 class="text-lg font-semibold mb-4">Reading Preferences</h3>
+      <div
+        id="settingsMenu"
+        class="mt-4 hidden rounded-lg bg-skin-card p-6 shadow-lg"
+      >
+        <h3 class="mb-4 text-lg font-semibold">Reading Preferences</h3>
         <div class="mb-4">
-          <label for="fontSize" class="block mb-2">Font Size: <span id="fontSizeValue">16px</span></label>
-          <input type="range" id="fontSize" min="12" max="24" value="16" class="w-full accent-skin-accent">
+          <label for="fontSize" class="mb-2 block"
+            >Font Size: <span id="fontSizeValue">16px</span></label
+          >
+          <input
+            type="range"
+            id="fontSize"
+            min="12"
+            max="24"
+            value="16"
+            class="accent-skin-accent w-full"
+          />
         </div>
         <div>
-          <label for="fontFamily" class="block mb-2">Font Family:</label>
-           <select id="fontFamily" class="w-full p-2 bg-skin-fill border border-skin-line rounded">
+          <label for="fontFamily" class="mb-2 block">Font Family:</label>
+          <select
+            id="fontFamily"
+            class="w-full rounded border border-skin-line bg-skin-fill p-2"
+          >
             <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
             <option value="'Roboto', sans-serif">Roboto</option>
             <option value="'Open Sans', sans-serif">Open Sans</option>
             <option value="'Lato', sans-serif">Lato</option>
             <option value="'Merriweather', serif">Merriweather</option>
-            <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
+            <option value="'Source Sans Pro', sans-serif"
+              >Source Sans Pro</option
+            >
             <option value="'Nunito', sans-serif">Nunito</option>
             <option value="'Ubuntu', sans-serif">Ubuntu</option>
             <option value="'Fira Sans', sans-serif">Fira Sans</option>
@@ -73,61 +109,98 @@ const nextChapterUrl = nextChapter ? `/novel/${id}/chapter/${nextChapter}/` : nu
         </div>
       </div>
     </div>
-    <h1 class="text-xl sm:text-3xl font-bold mb-6">{chapter.translated_title}</h1>
-    <div class="chapter-content space-y-4 mb-8">
-      {paragraphs.map((paragraph: string) => (
-        <p class="leading-relaxed text-pretty overflow-x-hidden">{paragraph}</p>
-      ))}
+    <h1 class="mb-6 text-xl font-bold sm:text-3xl">
+      {chapter.translated_title}
+    </h1>
+    <div class="my-8 flex items-center justify-between">
+      <LinkButton
+        href={prevChapterUrl || "#"}
+        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
+        disabled={!prevChapter}
+        ariaLabel={prevChapter
+          ? "Go to previous chapter"
+          : "No previous chapter"}
+      >
+        {
+          prevChapter ? (
+            <span>Previous Chapter</span>
+          ) : (
+            <span>First Chapter</span>
+          )
+        }
+      </LinkButton>
+
+      <span class="text-gray-400 max-sm:hidden">
+        Chapter {currentChapter} of {totalChapters}
+      </span>
+
+      <LinkButton
+        href={nextChapterUrl || "#"}
+        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
+        disabled={!nextChapter}
+        ariaLabel={nextChapter ? "Go to next chapter" : "No next chapter"}
+      >
+        {nextChapter ? <span>Next Chapter</span> : <span>Last Chapter</span>}
+      </LinkButton>
+    </div>
+    <div class="chapter-content mb-8 space-y-4">
+      {
+        paragraphs.map((paragraph: string) => (
+          <p class="overflow-x-hidden text-pretty leading-relaxed">
+            {paragraph}
+          </p>
+        ))
+      }
     </div>
 
-    <div class="sm:hidden flex justify-center items-center pt-8">
+    <div class="flex items-center justify-center pt-8 sm:hidden">
       <span class="text-gray-400">
         Chapter {currentChapter} of {totalChapters}
       </span>
     </div>
-    
-    <div class="flex justify-between items-center mt-8">
+
+    <div class="mt-8 flex items-center justify-between">
       <LinkButton
         href={prevChapterUrl || "#"}
-        className="font-bold py-2 px-2 sm:px-4 border hover:border-skin-line rounded text-sm sm:text-base"
+        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
         disabled={!prevChapter}
-        ariaLabel={prevChapter ? "Go to previous chapter" : "No previous chapter"}
+        ariaLabel={prevChapter
+          ? "Go to previous chapter"
+          : "No previous chapter"}
       >
-        {prevChapter ? (
-          <span>Previous Chapter</span>
-        ) : (
-          <span>First Chapter</span>
-        )}
+        {
+          prevChapter ? (
+            <span>Previous Chapter</span>
+          ) : (
+            <span>First Chapter</span>
+          )
+        }
       </LinkButton>
-      
+
       <span class="text-gray-400 max-sm:hidden">
         Chapter {currentChapter} of {totalChapters}
       </span>
-      
+
       <LinkButton
         href={nextChapterUrl || "#"}
-        className="font-bold py-2 px-2 sm:px-4 border hover:border-skin-line rounded text-sm sm:text-base"
+        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
         disabled={!nextChapter}
         ariaLabel={nextChapter ? "Go to next chapter" : "No next chapter"}
       >
-        {nextChapter ? (
-          <span>Next Chapter</span>
-        ) : (
-          <span>Last Chapter</span>
-        )}
+        {nextChapter ? <span>Next Chapter</span> : <span>Last Chapter</span>}
       </LinkButton>
     </div>
   </div>
-  <script define:vars={{ prevChapterUrl, nextChapterUrl }}>
+  <script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
     function handleKeyPress(event) {
-      if (event.key === 'ArrowLeft' && prevChapterUrl) {
+      if (event.key === "ArrowLeft" && prevChapterUrl) {
         window.location.href = prevChapterUrl;
-      } else if (event.key === 'ArrowRight' && nextChapterUrl) {
+      } else if (event.key === "ArrowRight" && nextChapterUrl) {
         window.location.href = nextChapterUrl;
       }
     }
 
-const debounce = (func, delay) => {
+    const debounce = (func, delay) => {
       let timeoutId;
       return (...args) => {
         clearTimeout(timeoutId);
@@ -136,63 +209,68 @@ const debounce = (func, delay) => {
     };
 
     const updateStyles = debounce(() => {
-      const fontSize = document.getElementById('fontSize').value;
-      const fontFamily = document.getElementById('fontFamily').value;
-      document.documentElement.style.setProperty('--font-size', `${fontSize}px`);
-      document.documentElement.style.setProperty('--font-family', fontFamily);
-      document.getElementById('fontSizeValue').textContent = `${fontSize}px`;
-      
-      localStorage.setItem('readerFontSize', fontSize);
-      localStorage.setItem('readerFontFamily', fontFamily);
+      const fontSize = document.getElementById("fontSize").value;
+      const fontFamily = document.getElementById("fontFamily").value;
+      document.documentElement.style.setProperty(
+        "--font-size",
+        `${fontSize}px`
+      );
+      document.documentElement.style.setProperty("--font-family", fontFamily);
+      document.getElementById("fontSizeValue").textContent = `${fontSize}px`;
+
+      localStorage.setItem("readerFontSize", fontSize);
+      localStorage.setItem("readerFontFamily", fontFamily);
 
       if (fontFamily !== "'IBM Plex Mono', monospace") {
-        const fontName = fontFamily.split(',')[0].replace(/'/g, '');
-        const link = document.createElement('link');
-        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(' ', '+')}&display=swap`;
-        link.rel = 'stylesheet';
+        const fontName = fontFamily.split(",")[0].replace(/'/g, "");
+        const link = document.createElement("link");
+        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(" ", "+")}&display=swap`;
+        link.rel = "stylesheet";
         document.head.appendChild(link);
       }
     }, 300);
 
     function loadPreferences() {
-      const fontSize = localStorage.getItem('readerFontSize') || '16';
-      const fontFamily = localStorage.getItem('readerFontFamily') || "'IBM Plex Mono', monospace";
-      
-      document.getElementById('fontSize').value = fontSize;
-      document.getElementById('fontFamily').value = fontFamily;
-      
+      const fontSize = localStorage.getItem("readerFontSize") || "16";
+      const fontFamily =
+        localStorage.getItem("readerFontFamily") ||
+        "'IBM Plex Mono', monospace";
+
+      document.getElementById("fontSize").value = fontSize;
+      document.getElementById("fontFamily").value = fontFamily;
+
       updateStyles();
     }
 
-    document.getElementById('fontSize').addEventListener('input', updateStyles);
-    document.getElementById('fontFamily').addEventListener('change', updateStyles);
+    document.getElementById("fontSize").addEventListener("input", updateStyles);
+    document
+      .getElementById("fontFamily")
+      .addEventListener("change", updateStyles);
 
-    document.getElementById('toggleSettings').addEventListener('click', () => {
-      const settingsMenu = document.getElementById('settingsMenu');
-      settingsMenu.classList.toggle('hidden');
+    document.getElementById("toggleSettings").addEventListener("click", () => {
+      const settingsMenu = document.getElementById("settingsMenu");
+      settingsMenu.classList.toggle("hidden");
     });
 
     // Load preferences when the page loads
     loadPreferences();
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
 
-    document.addEventListener('astro:before-swap', () => {
-      document.removeEventListener('keydown', handleKeyPress);
+    document.addEventListener("astro:before-swap", () => {
+      document.removeEventListener("keydown", handleKeyPress);
     });
   </script>
 </ChapterLayout>
 
 <style is:global>
+  :root {
+    --font-size: 16px;
+    --font-family: "IBM Plex Mono", monospace;
+  }
 
-    :root {
-      --font-size: 16px;
-      --font-family: 'IBM Plex Mono', monospace;
-    }
-
-    .chapter-content {
-      font-size: var(--font-size);
-      font-family: var(--font-family);
-    }
-  </style>
-
+  .chapter-content {
+    font-size: var(--font-size);
+    font-family: var(--font-family);
+  }
+</style>
