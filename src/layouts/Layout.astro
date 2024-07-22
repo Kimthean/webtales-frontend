@@ -1,7 +1,7 @@
 ---
 import "@styles/base.css";
 import { ViewTransitions } from "astro:transitions";
-import  SpeedInsights  from "@vercel/speed-insights/astro"
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 interface Props {
   title?: string;
@@ -10,7 +10,7 @@ interface Props {
   canonicalURL?: string;
 }
 
-const { 
+const {
   title = "Webtales",
   description = "Your MTL Novels Sources",
   image = "http://img.9999txt.cc/91/91333/91333s.jpg",
@@ -18,14 +18,12 @@ const {
 } = Astro.props;
 
 function getAbsoluteURL(path: string): string {
-  const baseURL = import.meta.env.SITE || 'https://example.com/';
+  const baseURL = import.meta.env.SITE || "https://example.com/";
   return new URL(path, baseURL).toString();
 }
 
 const pageURL = getAbsoluteURL(canonicalURL);
-const ogImage = image.startsWith('http') ? image : getAbsoluteURL(image);
-
-
+const ogImage = image.startsWith("http") ? image : getAbsoluteURL(image);
 ---
 
 <!doctype html>
@@ -35,7 +33,7 @@ const ogImage = image.startsWith('http') ? image : getAbsoluteURL(image);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
@@ -58,7 +56,10 @@ const ogImage = image.startsWith('http') ? image : getAbsoluteURL(image);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-
+    <meta
+      name="google-site-verification"
+      content="gkr0TD9V6Zui_8BfnEllUPWNH6zuFiyTeZPdP0Wlz90"
+    />
     <ViewTransitions />
     <script is:inline src="/toggle-theme.js"></script>
   </head>
