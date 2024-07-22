@@ -34,7 +34,7 @@
   }
 
   html[data-theme="light"] body::before {
-    opacity: 0.1;
+    opacity: 0.05;
     mix-blend-mode: multiply;
   }
 
