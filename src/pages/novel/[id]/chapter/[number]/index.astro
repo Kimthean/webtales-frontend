@@ -50,15 +50,34 @@ const nextChapterUrl = nextChapter
 ---
 
 <ChapterLayout>
-  <div class="container mx-auto max-w-3xl py-8">
+  <div class="container mx-auto max-w-3xl sm:py-8">
+    <div class="flex items-center justify-between sm:mb-6">
+      <a
+        href={`/novel/${id}/`}
+        class="flex items-center py-3 text-center font-bold hover:text-skin-accent sm:my-0 sm:py-1 sm:text-xl"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          ><path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5L10 4.563L2.682 12z"
+          ></path></svg
+        >
+        Back to Novel
+      </a>
+    </div>
     <div class="settings-panel mb-6">
       <button
         id="toggleSettings"
-        class="transform rounded-full bg-skin-card px-4 py-2 shadow-2xl transition duration-300 ease-in-out hover:scale-105 hover:bg-skin-card-muted"
+        class="flex transform items-center justify-center rounded-full bg-skin-card px-4 py-2 text-center shadow-2xl transition duration-300 ease-in-out hover:scale-105 hover:bg-skin-card-muted"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="mr-2 inline-block h-5 w-5"
+          class="inline-block h-5 w-5 sm:mr-2"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -67,7 +86,7 @@ const nextChapterUrl = nextChapter
             d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
             clip-rule="evenodd"></path>
         </svg>
-        Settings
+        <p class="hidden sm:block">Settings</p>
       </button>
       <div
         id="settingsMenu"
@@ -109,7 +128,7 @@ const nextChapterUrl = nextChapter
         </div>
       </div>
     </div>
-    <h1 class="mb-6 text-xl font-bold sm:text-3xl">
+    <h1 class="mb-6 text-xl font-bold sm:text-2xl">
       {chapter.translated_title}
     </h1>
     <div class="my-8 flex items-center justify-between">
