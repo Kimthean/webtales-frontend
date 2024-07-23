@@ -32,6 +32,10 @@ const getChaptersData = async (id: string | undefined) => {
 
 const chapters = await getChaptersData(id);
 
+const novel_description = novel.description
+  .split("\n\n")
+  .filter((p: string) => p.trim() !== "");
+
 const title = `${novel.title} | Webtales`;
 const description = novel.description.slice(0, 160);
 ---
@@ -63,7 +67,15 @@ const description = novel.description.slice(0, 160);
           <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
             Description
           </h2>
-          <p class="text-sm text-skin-base sm:text-base">{novel.description}</p>
+          <p class="text-sm text-skin-base sm:text-base">
+            {
+              novel_description.map((description: string) => (
+                <p class="overflow-x-hidden text-pretty leading-relaxed">
+                  {description}
+                </p>
+              ))
+            }
+          </p>
         </div>
       </div>
       <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
