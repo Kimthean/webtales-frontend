@@ -5,11 +5,11 @@ import { Icon } from "astro-icon/components";
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 ---
 
-<div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6 max-sm:px-4">
+<div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
   {
     novels.map(novel => (
       <a
-        href={`/novel/${novel.ID}`}
+        href={`/novel/${novel.ID}/`}
         class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]"
       >
         <div class="flex flex-col sm:flex-row">

@@ -6,10 +6,11 @@ const { props } = Astro;
   {
     "titleTransition" in props ? (
       <h1>
-        {props.pageTitle[0]}
-        <span transition:name={props.titleTransition}>
-          {props.pageTitle[1]}
-        </span>
+        {props.pageTitle.split("").map((char: string, index: number) => (
+          <span class="title-char" style={`transition-delay: ${index * 50}ms;`}>
+            {char}
+          </span>
+        ))}
       </h1>
     ) : (
       <h1>{props.pageTitle}</h1>
@@ -28,5 +29,17 @@ const { props } = Astro;
   }
   #main-content p {
     @apply mb-6 mt-2 italic;
+  }
+  .title-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+  .title-char:hover {
+    opacity: 1;
+    transform: translateY(0);
   }
 </style>
