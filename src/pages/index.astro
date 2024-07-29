@@ -3,6 +3,7 @@ import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
 import NovelCard from "@components/NovelCard.astro";
 import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
 
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
@@ -26,19 +27,20 @@ async function fetchNovelStatus(novel: { ID: number }) {
 
 <Layout>
   <Header activeNav="novels" />
-  <main>
+  <Main>
     <div
       class="mt-4 border-l-4 border-yellow-500 bg-yellow-100 p-4 text-yellow-700"
     >
       <p class="font-bold">Work in Progress</p>
       <p>
-        Note: This content is currently under development and may contain errors
-        or inconsistencies between novels.
+        Note: This site is currently under development and may contain errors or
+        inconsistencies between novels.
       </p>
     </div>
     <div class="flex flex-col py-12">
       <NovelCard novels={novels} />
     </div>
-  </main>
+  </Main>
+
   <Footer />
 </Layout>
