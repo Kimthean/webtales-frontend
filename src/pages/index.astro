@@ -4,14 +4,19 @@ import Header from "@components/Header.astro";
 import NovelCard from "@components/NovelCard.astro";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
+import Pagination from "@components/Pagination.astro";
 
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
-async function fetchNovels() {
-  return await fetch(`${API_URL}/novels`).then(res => res.json());
+const currentPage = parseInt(Astro.url.searchParams.get("page") || "1");
+const limit = 15;
+
+async function fetchNovels(page: number, limit: number) {
+  const response = await fetch(`${API_URL}/novels?page=${page}&limit=${limit}`);
+  return response.json();
 }
 
-const novels = await fetchNovels();
+const { novels, totalPages } = await fetchNovels(currentPage, limit);
 
 for (const novel of novels) {
   const status = await fetchNovelStatus(novel);
@@ -23,6 +28,9 @@ async function fetchNovelStatus(novel: { ID: number }) {
   const status = await response.json();
   return status;
 }
+
+const prevUrl = currentPage > 1 ? `?page=${currentPage - 1}` : "";
+const nextUrl = currentPage < totalPages ? `?page=${currentPage + 1}` : "";
 ---
 
 <Layout>
@@ -40,7 +48,13 @@ async function fetchNovelStatus(novel: { ID: number }) {
     <div class="flex flex-col py-8">
       <NovelCard novels={novels} />
     </div>
-  </Main>
 
+    <Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      prevUrl={prevUrl}
+      nextUrl={nextUrl}
+    />
+  </Main>
   <Footer />
 </Layout>
