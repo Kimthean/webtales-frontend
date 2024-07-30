@@ -67,15 +67,29 @@ const description = novel.description.slice(0, 160);
           <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
             Description
           </h2>
-          <p class="text-sm text-skin-base sm:text-base">
-            {
-              novel_description.map((description: string) => (
-                <p class="overflow-x-hidden text-pretty leading-relaxed">
-                  {description}
-                </p>
-              ))
-            }
-          </p>
+          <div
+            id="descriptionContainer"
+            class="text-sm text-skin-base sm:text-base"
+          >
+            <p
+              id="shortDescription"
+              class="overflow-x-hidden text-pretty leading-relaxed"
+            >
+              {novel.description.split(" ").slice(0, 50).join(" ")}...
+            </p>
+            <p
+              id="fullDescription"
+              class="hidden overflow-x-hidden text-pretty leading-relaxed"
+            >
+              {novel.description}
+            </p>
+            <button
+              id="toggleDescription"
+              class="mt-2 text-skin-accent hover:underline"
+            >
+              Read more
+            </button>
+          </div>
         </div>
       </div>
       <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
@@ -89,7 +103,7 @@ const description = novel.description.slice(0, 160);
                 (chapter: { translated_title: string; Number: string }) => (
                   <li class="w-full">
                     <a
-                      href={`/novel/${id}/chapter/${chapter.Number}`}
+                      href={`/novel/${id}/chapter/${chapter.Number}/`}
                       class="block rounded-md p-1 py-2 transition duration-150 ease-in-out hover:bg-skin-accent sm:p-3"
                     >
                       <span class="text-sm text-skin-base opacity-80 sm:text-base">
@@ -131,3 +145,23 @@ const description = novel.description.slice(0, 160);
     }
   }
 </style>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const container = document.getElementById("descriptionContainer");
+    if (container) {
+      const shortDesc = container.querySelector("#shortDescription");
+      const fullDesc = container.querySelector("#fullDescription");
+      const toggleBtn = container.querySelector("#toggleDescription");
+
+      if (shortDesc && fullDesc && toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          const isExpanded = shortDesc.classList.contains("hidden");
+          shortDesc.classList.toggle("hidden");
+          fullDesc.classList.toggle("hidden");
+          toggleBtn.textContent = isExpanded ? "Read more" : "Read less";
+        });
+      }
+    }
+  });
+</script>
