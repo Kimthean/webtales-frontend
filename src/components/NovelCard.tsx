@@ -8,7 +8,7 @@ interface NovelCardProps {
 const NovelCard: React.FC<NovelCardProps> = ({ novel }) => {
   return (
     <a
-      href={`/novel/${novel.ID}`}
+      href={`/novel/${novel.ID}/`}
       className="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]"
     >
       <div className="flex flex-col sm:flex-row">
