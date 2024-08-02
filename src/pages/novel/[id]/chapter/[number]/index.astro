@@ -9,7 +9,7 @@ const getChapterData = async (
   id: string | undefined,
   chapterNumber: string | undefined
 ) => {
-  const res = await fetch(`${API_URL}/novels/${id}/chapters/${chapterNumber}`);
+  const res = await fetch(`${API_URL}/novels/${id}/chapter/${chapterNumber}`);
   if (!res.ok) {
     return null;
   }
