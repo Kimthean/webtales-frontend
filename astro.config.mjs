@@ -1,6 +1,6 @@
 import { defineConfig, passthroughImageService } from "astro/config";
 import tailwind from "@astrojs/tailwind";
-import vercel from "@astrojs/vercel/serverless";
+import vercelServerless from "@astrojs/vercel/serverless";
 import icon from "astro-icon";
 import react from "@astrojs/react";
 
@@ -9,7 +9,7 @@ export default defineConfig({
   site: "https://webtales-eight.vercel.app",
   integrations: [tailwind(), icon(), react()],
   output: "server",
-  adapter: vercel(),
+  adapter: vercelServerless(),
   image: {
     service: passthroughImageService(),
     domains: ["img.9999txt.cc"],
