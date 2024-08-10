@@ -18,17 +18,6 @@ async function fetchNovels(page: number, limit: number) {
 
 const { novels, totalPages } = await fetchNovels(currentPage, limit);
 
-for (const novel of novels) {
-  const status = await fetchNovelStatus(novel);
-  novel.status = status;
-}
-
-async function fetchNovelStatus(novel: { ID: number }) {
-  const response = await fetch(`${API_URL}/novels/chapters-stats/${novel.ID}`);
-  const status = await response.json();
-  return status;
-}
-
 const prevUrl = currentPage > 1 ? `?page=${currentPage - 1}` : "";
 const nextUrl = currentPage < totalPages ? `?page=${currentPage + 1}` : "";
 ---
