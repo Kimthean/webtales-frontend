@@ -47,7 +47,8 @@ const description = novel.description.slice(0, 160);
       <div class="lg:col-span-2">
         {
           novel.thumbnail && (
-            <Image
+            <img
+              transition:name={`novel-cover-${novel.id}`}
               class="mx-auto w-52 max-w-sm rounded-lg object-cover shadow-lg sm:h-auto sm:w-full"
               width={200}
               height={200}
@@ -56,7 +57,10 @@ const description = novel.description.slice(0, 160);
             />
           )
         }
-        <h1 class="mb-2 mt-6 text-2xl font-bold text-skin-base sm:text-4xl">
+        <h1
+          transition:name={`novel-title-${novel.id}`}
+          class="mb-2 mt-6 text-2xl font-bold text-skin-base sm:text-4xl"
+        >
           {novel.title}
         </h1>
         <p class="mb-2 sm:text-2xl">{novel.raw_title}</p>
@@ -103,6 +107,7 @@ const description = novel.description.slice(0, 160);
                 (chapter: { translated_title: string; Number: string }) => (
                   <li class="w-full">
                     <a
+                      transition:name={`chapter-${id}-${chapter.Number}`}
                       href={`/novel/${id}/chapter/${chapter.Number}/`}
                       class="block rounded-md p-1 py-2 transition duration-150 ease-in-out hover:bg-skin-accent sm:p-3"
                     >

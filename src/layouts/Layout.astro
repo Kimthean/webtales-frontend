@@ -12,12 +12,12 @@ interface Props {
 const {
   title = "Webtales",
   description = "Your MTL Novels Sources",
-  image = "http://img.9999txt.cc/91/91333/91333s.jpg",
+  image = "https://webtales.sgp1.digitaloceanspaces.com/cover/novel-thumbnail-3391629360.jpg",
   canonicalURL = Astro.url.pathname,
 } = Astro.props;
 
 function getAbsoluteURL(path: string): string {
-  const baseURL = import.meta.env.SITE || "https://example.com/";
+  const baseURL = import.meta.env.SITE || "https://webtalesmtl.xyz";
   return new URL(path, baseURL).toString();
 }
 
@@ -66,8 +66,12 @@ const ogImage = image.startsWith("http") ? image : getAbsoluteURL(image);
     />
     <ViewTransitions />
     <script is:inline src="/toggle-theme.js"></script>
+
+    <style is:global>
+
+    </style>
   </head>
-  <body class="mx-auto max-w-4xl">
-    <slot />
-  </body>
 </html>
+<body class="mx-auto max-w-4xl">
+  <slot />
+</body>
