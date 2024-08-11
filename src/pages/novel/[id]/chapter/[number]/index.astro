@@ -34,6 +34,8 @@ if (!chapter || !chapterStats) {
 const currentChapter = parseInt(number as string);
 const totalChapters = chapterStats.total_chapters;
 
+console.log(chapter.novel_title);
+
 const paragraphs = chapter.translated_content
   .split("\n\n")
   .filter((p: string) => p.trim() !== "");
@@ -49,7 +51,10 @@ const nextChapterUrl = nextChapter
   : null;
 ---
 
-<ChapterLayout>
+<ChapterLayout
+  novel_name={chapter.novel_title}
+  chapter_title={chapter.translated_title}
+>
   <div class="container mx-auto max-w-3xl sm:py-8">
     <div class="flex items-center justify-between sm:mb-6">
       <a

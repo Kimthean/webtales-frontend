@@ -2,9 +2,16 @@
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+
+interface Props {
+  chapter_title: string;
+  novel_name: string;
+}
+
+const { chapter_title, novel_name } = Astro.props;
 ---
 
-<Layout>
+<Layout title={novel_name + " | " + chapter_title}>
   <Header activeNav="novels" />
   <div
     class="progress-container fixed left-0 top-0 z-10 h-1 w-full bg-skin-fill"
