@@ -21,10 +21,10 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
           )}
           <div class="flex flex-grow flex-col justify-between p-4">
             <div class="flex-grow">
-              <h2
-                class="mb-2 font-bold text-skin-base sm:text-xl"
-              >
-                {novel.title}
+              <h2 class="mb-2 font-bold text-skin-base sm:text-xl">
+                {novel.title.replace(/\b\w/g, (char: string) =>
+                  char.toUpperCase()
+                )}
               </h2>
               <div class="relative">
                 <p class="line-clamp-3 text-sm text-skin-base sm:line-clamp-4">
@@ -40,7 +40,7 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
               Chapters
             </p>
             <p class="text-sm text-skin-base opacity-80 sm:mt-auto">
-              Author: {novel.author}
+              Author: {novel.author.replace(/_/g, " ")}
             </p>
           </div>
         </div>

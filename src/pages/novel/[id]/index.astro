@@ -35,8 +35,8 @@ const novel_description = novel.description
   .split("\n\n")
   .filter((p: string) => p.trim() !== "");
 
-const title = `${novel.title} | Webtales`;
-const description = novel.description.slice(0, 160);
+const title = `${novel.title.replace(/\b\w/g, (char: string) => char.toUpperCase())} | Webtales`;
+const description = novel_description.slice(0, 160);
 ---
 
 <Layout title={title} description={description} image={novel.thumbnail}>
@@ -55,14 +55,18 @@ const description = novel.description.slice(0, 160);
             />
           )
         }
-        <h1
-          class="mb-2 mt-6 text-2xl font-bold text-skin-base sm:text-4xl"
-        >
-          {novel.title}
+        <h1 class="mb-2 mt-6 text-2xl font-bold text-skin-base sm:text-4xl">
+          {novel.title.replace(/\b\w/g, (char: string) => char.toUpperCase())}
         </h1>
-        <p class="mb-2 sm:text-2xl">{novel.raw_title}</p>
+        <p class="mb-2 sm:text-2xl">
+          {
+            novel.raw_title.replace(/\b\w/g, (char: string) =>
+              char.toUpperCase()
+            )
+          }
+        </p>
         <p class="mb-4 text-lg text-skin-base opacity-80 sm:text-xl">
-          Author: {novel.author}
+          Author: {novel.author.replace(/_/g, " ")}
         </p>
         <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
           <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
