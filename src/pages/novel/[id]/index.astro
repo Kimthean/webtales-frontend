@@ -76,18 +76,26 @@ const description = novel_description.slice(0, 160);
             id="descriptionContainer"
             class="text-sm text-skin-base sm:text-base"
           >
-            <p
+            <div
               id="shortDescription"
               class="overflow-x-hidden text-pretty leading-relaxed"
             >
-              {novel.description.split(" ").slice(0, 50).join(" ")}...
-            </p>
-            <p
+              {
+                novel_description
+                  .slice(0, 3)
+                  .map((paragraph: string) => <p>{paragraph}</p>)
+              }
+            </div>
+            <div
               id="fullDescription"
               class="hidden overflow-x-hidden text-pretty leading-relaxed"
             >
-              {novel_description}
-            </p>
+              {
+                novel_description.map((paragraph: string, index: number) => (
+                  <p>{paragraph}</p>
+                ))
+              }
+            </div>
             <button
               id="toggleDescription"
               class="mt-2 text-skin-accent hover:underline"

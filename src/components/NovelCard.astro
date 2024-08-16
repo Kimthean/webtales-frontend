@@ -40,7 +40,14 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
               Chapters
             </p>
             <p class="text-sm text-skin-base opacity-80 sm:mt-auto">
-              Author: {novel.author.replace(/_/g, " ")}
+              Author:{" "}
+              {novel.author
+                .replace(/[_-]/g, " ")
+                .split(" ")
+                .map(
+                  (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
+                )
+                .join(" ")}
             </p>
           </div>
         </div>
