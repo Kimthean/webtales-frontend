@@ -31,5 +31,5 @@ export default defineConfig({
       external: ["@11ty/eleventy-img", "svgo"],
     },
   },
-  trailingSlash: "always",
+  // trailingSlash: "always",
 });

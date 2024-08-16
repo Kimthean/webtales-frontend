@@ -1,7 +1,7 @@
 ---
 import LinkButton from "./LinkButton.astro";
 
-export interface Props {
+interface Props {
   currentPage: number;
   totalPages: number;
   prevUrl: string;
@@ -10,10 +10,47 @@ export interface Props {
 
 const { currentPage, totalPages, prevUrl, nextUrl } = Astro.props;
 
-const prev = currentPage > 1 ? "" : "disabled";
-const next = currentPage < totalPages ? "" : "disabled";
-const isPrevDisabled = prev === "disabled";
-const isNextDisabled = next === "disabled";
+const prev: string = currentPage > 1 ? "" : "disabled";
+const next: string = currentPage < totalPages ? "" : "disabled";
+const isPrevDisabled: boolean = prev === "disabled";
+const isNextDisabled: boolean = next === "disabled";
+
+const getPageNumbers = (): (number | string)[] => {
+  const pageNumbers: (number | string)[] = [];
+  const showPages: number = 4;
+  const halfShowPages: number = Math.floor(showPages / 2);
+
+  let startPage: number = Math.max(1, currentPage - halfShowPages);
+  let endPage: number = Math.min(totalPages, startPage + showPages - 1);
+
+  if (endPage - startPage < showPages - 1) {
+    startPage = Math.max(1, endPage - showPages + 1);
+  }
+
+  for (let i: number = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
+
+  if (endPage < totalPages - 1) {
+    pageNumbers.push("...");
+    pageNumbers.push(totalPages);
+  } else if (endPage === totalPages - 1) {
+    pageNumbers.push(totalPages);
+  }
+
+  return pageNumbers;
+};
+
+const pageNumbers: (number | string)[] = getPageNumbers();
+
+const getPageUrl = (pageNum: number | string): string => {
+  if (typeof pageNum === "number") {
+    const url = new URL(Astro.request.url);
+    url.searchParams.set("page", pageNum.toString());
+    return url.pathname + url.search;
+  }
+  return "#";
+};
 ---
 
 {
@@ -37,14 +74,18 @@ const isNextDisabled = next === "disabled";
         {currentPage} / {totalPages}
       </p>
       <div class="page-numbers">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-          <a
-            href={`?page=${page}`}
-            class={`page-number ${currentPage === page ? "current" : ""}`}
-          >
-            {page}
-          </a>
-        ))}
+        {pageNumbers.map((pageNum, index) =>
+          pageNum === "..." ? (
+            <span class="page-ellipsis">...</span>
+          ) : (
+            <a
+              href={getPageUrl(pageNum)}
+              class={`page-number ${currentPage === pageNum ? "current" : ""}`}
+            >
+              {pageNum}
+            </a>
+          )
+        )}
       </div>
       <LinkButton
         disabled={isNextDisabled}
@@ -82,6 +123,9 @@ const isNextDisabled = next === "disabled";
   }
   .page-number.current {
     @apply bg-skin-accent text-skin-inverted;
+  }
+  .page-ellipsis {
+    @apply px-2 py-1;
   }
   @media (max-width: 640px) {
     .page-numbers {
