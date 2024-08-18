@@ -49,7 +49,7 @@ const formatRelativeTime = (dateString: string) => {
         <div class="flex flex-col sm:flex-row">
           {novel.thumbnail && (
             <img
-              class="h-56 w-full min-w-48 object-contain sm:h-auto sm:w-48"
+              class="h-full w-full min-w-48 max-sm:max-h-72 object-contain sm:h-auto sm:w-48 sm:object-cover"
               src={novel.thumbnail}
               alt={novel.title}
             />
