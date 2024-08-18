@@ -59,20 +59,19 @@ const getPageUrl = (pageNum: number | string): string => {
       <LinkButton
         disabled={isPrevDisabled}
         href={prevUrl}
-        className={`mr-4 flex select-none items-center justify-center ${prev}`}
+        className={`pagination-button ${prev}`}
         ariaLabel="Previous"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class:list={[{ "disabled-svg": isPrevDisabled }]}
+          class:list={["pagination-icon", { "disabled-svg": isPrevDisabled }]}
+          viewBox="0 0 24 24"
+          fill="currentColor"
         >
           <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
         </svg>
-        Prev
+        <span class="button-text">Prev</span>
       </LinkButton>
-      <p class="sm:hidden">
-        {currentPage} / {totalPages}
-      </p>
       <div class="page-numbers">
         {pageNumbers.map((pageNum, index) =>
           pageNum === "..." ? (
@@ -90,13 +89,15 @@ const getPageUrl = (pageNum: number | string): string => {
       <LinkButton
         disabled={isNextDisabled}
         href={nextUrl}
-        className={`ml-4 flex select-none items-center justify-center ${next}`}
+        className={`pagination-button ${next}`}
         ariaLabel="Next"
       >
-        Next
+        <span class="button-text">Next</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class:list={[{ "disabled-svg": isNextDisabled }]}
+          class:list={["pagination-icon", { "disabled-svg": isNextDisabled }]}
+          viewBox="0 0 24 24"
+          fill="currentColor"
         >
           <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
         </svg>
@@ -107,7 +108,13 @@ const getPageUrl = (pageNum: number | string): string => {
 
 <style>
   .pagination-wrapper {
-    @apply mb-8 mt-auto flex items-center justify-center;
+    @apply mb-8 mt-auto flex flex-wrap items-center justify-center;
+  }
+  .pagination-button {
+    @apply flex select-none items-center justify-center;
+  }
+  .pagination-icon {
+    @apply h-5 w-5;
   }
   .disabled {
     @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
@@ -116,20 +123,45 @@ const getPageUrl = (pageNum: number | string): string => {
     @apply group-hover:!fill-skin-base;
   }
   .page-numbers {
-    @apply flex space-x-2;
+    @apply mx-2 my-2 flex flex-wrap justify-center space-x-1;
   }
   .page-number {
-    @apply rounded px-3 py-1;
+    @apply rounded px-2 py-1 text-sm;
   }
   .page-number.current {
     @apply bg-skin-accent text-skin-inverted;
   }
   .page-ellipsis {
-    @apply px-2 py-1;
+    @apply px-1 py-1 text-sm;
   }
-  @media (max-width: 640px) {
+  .button-text {
+    @apply hidden;
+  }
+
+  @media (min-width: 480px) {
+    .pagination-wrapper {
+      @apply flex-nowrap;
+    }
     .page-numbers {
-      @apply hidden;
+      @apply space-x-2;
+    }
+    .page-number {
+      @apply px-3 py-1 text-base;
+    }
+    .page-ellipsis {
+      @apply px-2 py-1 text-base;
+    }
+    .pagination-icon {
+      @apply h-6 w-6;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .button-text {
+      @apply ml-1 inline-block;
+    }
+    .pagination-icon {
+      @apply h-6 w-6;
     }
   }
 </style>
