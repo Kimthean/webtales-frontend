@@ -55,31 +55,34 @@ const getPageUrl = (pageNum: number | string): string => {
 
 {
   totalPages > 1 && (
-    <nav class="pagination-wrapper" aria-label="Pagination">
+    <nav
+      class="mb-8 mt-auto flex flex-wrap items-center justify-center"
+      aria-label="Pagination"
+    >
       <LinkButton
         disabled={isPrevDisabled}
         href={prevUrl}
-        className={`pagination-button ${prev}`}
+        className={`flex items-center justify-center ${isPrevDisabled ? "pointer-events-none opacity-50" : ""}`}
         ariaLabel="Previous"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class:list={["pagination-icon", { "disabled-svg": isPrevDisabled }]}
+          class={`h-6 w-6 ${isPrevDisabled ? "text-gray-400" : "text-current"}`}
           viewBox="0 0 24 24"
           fill="currentColor"
         >
           <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
         </svg>
-        <span class="button-text">Prev</span>
+        <span class="ml-1 hidden sm:inline">Prev</span>
       </LinkButton>
-      <div class="page-numbers">
+      <div class="mx-2 my-2 flex flex-wrap justify-center space-x-2">
         {pageNumbers.map((pageNum, index) =>
           pageNum === "..." ? (
-            <span class="page-ellipsis">...</span>
+            <span class="px-2 py-1 text-base">...</span>
           ) : (
             <a
               href={getPageUrl(pageNum)}
-              class={`page-number ${currentPage === pageNum ? "current" : ""}`}
+              class={`rounded px-3 py-1 text-base ${currentPage === pageNum ? "bg-skin-accent text-skin-inverted" : ""}`}
             >
               {pageNum}
             </a>
@@ -89,13 +92,13 @@ const getPageUrl = (pageNum: number | string): string => {
       <LinkButton
         disabled={isNextDisabled}
         href={nextUrl}
-        className={`pagination-button ${next}`}
+        className={`flex items-center justify-center ${isNextDisabled ? "pointer-events-none opacity-50" : ""}`}
         ariaLabel="Next"
       >
-        <span class="button-text">Next</span>
+        <span class="mr-1 hidden sm:inline">Next</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class:list={["pagination-icon", { "disabled-svg": isNextDisabled }]}
+          class={`h-6 w-6 ${isNextDisabled ? "text-gray-400" : "text-current"}`}
           viewBox="0 0 24 24"
           fill="currentColor"
         >
@@ -105,63 +108,3 @@ const getPageUrl = (pageNum: number | string): string => {
     </nav>
   )
 }
-
-<style>
-  .pagination-wrapper {
-    @apply mb-8 mt-auto flex flex-wrap items-center justify-center;
-  }
-  .pagination-button {
-    @apply flex select-none items-center justify-center;
-  }
-  .pagination-icon {
-    @apply h-5 w-5;
-  }
-  .disabled {
-    @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
-  }
-  .disabled-svg {
-    @apply group-hover:!fill-skin-base;
-  }
-  .page-numbers {
-    @apply mx-2 my-2 flex flex-wrap justify-center space-x-1;
-  }
-  .page-number {
-    @apply rounded px-2 py-1 text-sm;
-  }
-  .page-number.current {
-    @apply bg-skin-accent text-skin-inverted;
-  }
-  .page-ellipsis {
-    @apply px-1 py-1 text-sm;
-  }
-  .button-text {
-    @apply hidden;
-  }
-
-  @media (min-width: 480px) {
-    .pagination-wrapper {
-      @apply flex-nowrap;
-    }
-    .page-numbers {
-      @apply space-x-2;
-    }
-    .page-number {
-      @apply px-3 py-1 text-base;
-    }
-    .page-ellipsis {
-      @apply px-2 py-1 text-base;
-    }
-    .pagination-icon {
-      @apply h-6 w-6;
-    }
-  }
-
-  @media (min-width: 640px) {
-    .button-text {
-      @apply ml-1 inline-block;
-    }
-    .pagination-icon {
-      @apply h-6 w-6;
-    }
-  }
-</style>

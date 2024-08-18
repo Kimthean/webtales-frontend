@@ -2,10 +2,9 @@
 import Header from "@components/Header.astro";
 import Hr from "@components/Hr.astro";
 import Layout from "@layouts/Layout.astro";
+import { API_URL } from "@constants/index";
 
 const { id } = Astro.params;
-
-const API_URL = import.meta.env.PUBLIC_API_URL;
 
 const getNovelData = async (id: string | undefined) => {
   const res = await fetch(`${API_URL}/novels/${id}`);

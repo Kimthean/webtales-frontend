@@ -4,8 +4,7 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import SearchBar from "@components/Search.tsx";
 import Main from "@layouts/Main.astro";
-
-const API_URL = import.meta.env.PUBLIC_API_URL;
+import { API_URL } from "@constants/index";
 
 async function fetchNovels() {
   return await fetch(`${API_URL}/novels/all`).then(res => res.json());

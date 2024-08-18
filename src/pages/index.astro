@@ -5,8 +5,7 @@ import NovelCard from "@components/NovelCard.astro";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Pagination from "@components/Pagination.astro";
-
-const API_URL = import.meta.env.PUBLIC_API_URL;
+import { API_URL } from "@constants/index";
 
 const currentPage = parseInt(Astro.url.searchParams.get("page") || "1");
 const limit = 15;

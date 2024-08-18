@@ -1,9 +1,9 @@
 ---
 import ChapterLayout from "@layouts/ChapterLayout.astro";
 import LinkButton from "@components/LinkButton.astro";
+import { API_URL } from "@constants/index";
 
 const { id, number } = Astro.params;
-const API_URL = import.meta.env.PUBLIC_API_URL;
 
 const getChapterData = async (
   id: string | undefined,
