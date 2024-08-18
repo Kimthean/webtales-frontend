@@ -1,7 +1,42 @@
 ---
-import { Icon } from "astro-icon/components";
-
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
+
+const formatTitle = (title: string) => {
+  return title.replace(/\b\w/g, (char: string) => char.toUpperCase());
+};
+
+const formatAuthor = (author: string) => {
+  return author
+    .replace(/[_-]/g, " ")
+    .split(" ")
+    .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
+const formatRelativeTime = (dateString: string) => {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
+
+  if (diffInSeconds < 60) {
+    return "Just Now";
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} Minute${minutes > 1 ? "s" : ""} Ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} Hour${hours > 1 ? "s" : ""} Ago`;
+  } else if (diffInSeconds < 2592000) {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} Day${days > 1 ? "s" : ""} Ago`;
+  } else if (diffInSeconds < 31536000) {
+    const months = Math.floor(diffInSeconds / 2592000);
+    return `${months} Month${months > 1 ? "s" : ""} Ago`;
+  } else {
+    const years = Math.floor(diffInSeconds / 31536000);
+    return `${years} Year${years > 1 ? "s" : ""} Ago`;
+  }
+};
 ---
 
 <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
@@ -9,23 +44,24 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
     novels.map(novel => (
       <a
         href={`/novel/${novel.ID}/`}
-        class="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]"
+        class="relative block overflow-hidden rounded-xl bg-skin-card bg-opacity-60 shadow-lg"
       >
         <div class="flex flex-col sm:flex-row">
           {novel.thumbnail && (
             <img
-              class="h-48 w-full min-w-48 object-contain sm:h-auto sm:w-48"
+              class="h-56 w-full min-w-48 object-contain sm:h-auto sm:w-48"
               src={novel.thumbnail}
               alt={novel.title}
             />
           )}
           <div class="flex flex-grow flex-col justify-between p-4">
             <div class="flex-grow">
-              <h2 class="mb-2 font-bold text-skin-base sm:text-xl">
-                {novel.title.replace(/\b\w/g, (char: string) =>
-                  char.toUpperCase()
-                )}
+              <h2 class="font-bold text-skin-base sm:mb-2 sm:text-xl">
+                {formatTitle(novel.title)}
               </h2>
+              <p class="mb-1 text-sm italic text-skin-base opacity-70 sm:mb-4">
+                {novel.raw_title}
+              </p>
               <div class="relative">
                 <p class="line-clamp-3 text-sm text-skin-base sm:line-clamp-4">
                   {novel.description}
@@ -35,20 +71,28 @@ const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
             {novel.translation_status === "in_progress" ? (
               <p class="text-xs max-sm:pt-4">Translation Status: In Progress</p>
             ) : null}
-            <p class="items-center text-xs text-skin-base opacity-80 max-sm:pt-4 sm:pb-2">
-              <Icon name="book" class="size-5" /> {novel.total_chapters_count}{" "}
-              Chapters
-            </p>
-            <p class="text-sm text-skin-base opacity-80 sm:mt-auto">
-              Author:{" "}
-              {novel.author
-                .replace(/[_-]/g, " ")
-                .split(" ")
-                .map(
-                  (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
-                )
-                .join(" ")}
-            </p>
+            <div class="mt-4 flex gap-4 text-xs text-skin-base">
+              <div>
+                <span class="font-semibold">Author:</span>{" "}
+                {formatAuthor(novel.author)}
+              </div>
+              <div>
+                <span class="font-semibold">Chapters:</span>{" "}
+                {novel.total_chapters_count}
+              </div>
+              <div>
+                <span class="font-semibold">Updated:</span>{" "}
+                {formatRelativeTime(novel.CreatedAt)}
+              </div>
+              {novel.translation_status === "in_progress" && (
+                <div class="col-span-2 sm:col-span-3">
+                  <span class="font-semibold">Status:</span>
+                  <span class="ml-1 rounded-full bg-yellow-100 px-2 py-1 text-yellow-800">
+                    Translation in Progress
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </a>

@@ -65,7 +65,16 @@ const description = novel_description.slice(0, 160);
           }
         </p>
         <p class="mb-4 text-lg text-skin-base opacity-80 sm:text-xl">
-          Author: {novel.author.replace(/_/g, " ")}
+          Author:{" "}
+          {
+            novel.author
+              .replace(/[_-]/g, " ")
+              .split(" ")
+              .map(
+                (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
+              )
+              .join(" ")
+          }
         </p>
         <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
           <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
