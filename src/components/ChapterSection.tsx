@@ -39,7 +39,7 @@ const ChapterSection = ({ id, initialPage, pageSize }: ChapterSectionProps) => {
     setError(null);
     try {
       const res = await fetch(
-        `${API_URL}/novels/${id}/paginate-chapters?page=${page}&pageSize=${pageSize}`
+        `/api/chapter/?id=${id}&page=${page}&pageSize=${pageSize}`
       );
       if (res.ok) {
         const data = await res.json();
@@ -49,6 +49,7 @@ const ChapterSection = ({ id, initialPage, pageSize }: ChapterSectionProps) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
     } catch (e) {
+      console.error(e);
       setError("Failed to fetch chapters. Please try again later.");
     } finally {
       setIsLoading(false);
