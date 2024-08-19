@@ -49,7 +49,7 @@ const formatRelativeTime = (dateString: string) => {
         <div class="flex flex-col sm:flex-row">
           {novel.thumbnail && (
             <img
-              class="h-full w-full min-w-48 max-sm:max-h-72 object-contain sm:h-auto sm:w-48 sm:object-cover"
+              class="h-full w-full min-w-48 object-contain max-sm:max-h-72 sm:h-auto sm:w-48 sm:object-cover"
               src={novel.thumbnail}
               alt={novel.title}
             />
@@ -87,9 +87,7 @@ const formatRelativeTime = (dateString: string) => {
               {novel.translation_status === "in_progress" && (
                 <div class="col-span-2 sm:col-span-3">
                   <span class="font-semibold">Status:</span>
-                  <span class="ml-1 rounded-full bg-yellow-100 px-2 py-1 text-yellow-800">
-                    Translation in Progress
-                  </span>
+                  <span class="rounded-full">Translation in Progress</span>
                 </div>
               )}
             </div>
