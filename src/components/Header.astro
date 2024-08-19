@@ -10,7 +10,7 @@ const { activeNav } = Astro.props;
 const navItems = [
   { href: "/", label: "Novels" },
   // { href: "/bookmark/", label: "Bookmark" },
-  // { href: "/acccount/", label: "Account" },
+  { href: "/acccount/", label: "Account" },
   { href: "/search/", label: "Search", icon: true },
 ];
 ---
@@ -141,6 +141,13 @@ const navItems = [
   }
   .menu-icon.is-active .close {
     @apply opacity-100;
+  }
+
+  .hamburger-menu {
+    @apply self-end p-2 sm:hidden;
+  }
+  .hamburger-menu svg {
+    @apply h-6 w-6 scale-125 fill-skin-base;
   }
 </style>
 

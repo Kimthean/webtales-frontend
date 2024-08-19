@@ -1,11 +1,12 @@
-import React from "react";
+import { h } from "preact";
+
 import type { Novel } from "./Search";
 
 interface NovelCardProps {
   novel: Novel;
 }
 
-const NovelCard: React.FC<NovelCardProps> = ({ novel }) => {
+const NovelCard = ({ novel }: NovelCardProps) => {
   return (
     <a
       href={`/novel/${novel.ID}/`}

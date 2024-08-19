@@ -3,8 +3,12 @@ import Header from "@components/Header.astro";
 import Hr from "@components/Hr.astro";
 import Layout from "@layouts/Layout.astro";
 import { API_URL } from "@constants/index";
+import ChapterSection from "@components/ChapterSection";
 
 const { id } = Astro.params;
+
+const initialPage = parseInt(Astro.url.searchParams.get("page") || "1");
+const pageSize = 100;
 
 const getNovelData = async (id: string | undefined) => {
   const res = await fetch(`${API_URL}/novels/${id}`);
@@ -19,16 +23,6 @@ const novel = await getNovelData(id);
 if (!novel) {
   return Astro.redirect("/404");
 }
-
-const getChaptersData = async (id: string | undefined) => {
-  const res = await fetch(`${API_URL}/novels/${id}/chapters`);
-  if (!res.ok) {
-    return [];
-  }
-  return await res.json();
-};
-
-const chapters = await getChaptersData(id);
 
 const novel_description = novel.description
   .split("\n\n")
@@ -113,34 +107,12 @@ const description = novel_description.slice(0, 160);
           </div>
         </div>
       </div>
-      <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
-        <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
-          Chapters
-        </h2>
-        <div class="h-[500px] overflow-y-auto sm:h-96">
-          <ul class="space-y-2">
-            {
-              chapters.map(
-                (chapter: { translated_title: string; Number: string }) => (
-                  <li class="w-full">
-                    <a
-                      href={`/novel/${id}/chapter/${chapter.Number}/`}
-                      class="block rounded-md p-1 py-2 transition duration-150 ease-in-out hover:bg-skin-accent sm:p-3"
-                    >
-                      <span class="text-sm text-skin-base opacity-80 sm:text-base">
-                        {chapter.translated_title}
-                      </span>
-                    </a>
-                    <div class="pt-2 sm:px-3">
-                      <Hr noPadding={true} />
-                    </div>
-                  </li>
-                )
-              )
-            }
-          </ul>
-        </div>
-      </div>
+      <ChapterSection
+        id={id}
+        pageSize={pageSize}
+        initialPage={initialPage}
+        client:only="preact"
+      />
     </div>
   </div>
 </Layout>

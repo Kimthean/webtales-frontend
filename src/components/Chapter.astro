@@ -14,7 +14,7 @@ const getChapters = async (
   pageSize: number
 ) => {
   const res = await fetch(
-    `${API_URL}/novels/${id}/chapters/?page=${page}&pageSize=${pageSize}`
+    `${API_URL}/novels/${id}/paginate-chapters/?page=${page}&pageSize=${pageSize}`
   );
   if (!res.ok) {
     return [];
