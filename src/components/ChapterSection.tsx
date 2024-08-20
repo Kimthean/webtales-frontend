@@ -39,7 +39,7 @@ const ChapterSection = ({ id, initialPage, pageSize }: ChapterSectionProps) => {
     setError(null);
     try {
       const res = await fetch(
-        `/api/chapter/?id=${id}&page=${page}&pageSize=${pageSize}`
+        `/api/chapter?id=${id}&page=${page}&pageSize=${pageSize}`
       );
       if (res.ok) {
         const data = await res.json();
@@ -84,7 +84,7 @@ const ChapterSection = ({ id, initialPage, pageSize }: ChapterSectionProps) => {
                 class="flex h-full w-full flex-col justify-between"
               >
                 <a
-                  href={`/novel/${id}/chapter/${chapter.Number}/`}
+                  href={`/novel/${id}/chapter/${chapter.Number}`}
                   class="flex flex-grow flex-col rounded-md p-3 transition duration-150 ease-in-out hover:bg-skin-accent"
                 >
                   <span class="text-sm font-medium text-skin-base sm:text-sm">

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "preact/hooks";
 import Fuse from "fuse.js";
 import NovelCard from "./NovelCard";
 
@@ -36,7 +36,7 @@ export default function SearchBar({ NovelList }: Props) {
     null
   );
 
-  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const handleChange = (e: any) => {
     setInputVal(e.currentTarget.value);
   };
 
