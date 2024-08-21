@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { API_URL } from "../../constants/index";
 
-export const GET: APIRoute = async ({ request, params }) => {
+export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
   const page = url.searchParams.get("page");

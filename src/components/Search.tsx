@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState, useMemo } from "preact/hooks";
+import { h } from "preact";
+import { useEffect, useRef, useState, useMemo } from "preact/hooks";
 import Fuse from "fuse.js";
 import NovelCard from "./NovelCard";
 
@@ -29,7 +30,7 @@ interface SearchResult {
   refIndex: number;
 }
 
-export default function SearchBar({ NovelList }: Props) {
+function SearchBar({ NovelList }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputVal, setInputVal] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
@@ -118,3 +119,5 @@ export default function SearchBar({ NovelList }: Props) {
     </>
   );
 }
+
+export default SearchBar;
