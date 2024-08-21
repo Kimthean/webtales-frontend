@@ -204,7 +204,7 @@ const description = novel_description.slice(0, 160);
         const response = await fetch(`/api/epub?id=${id}`, {
           method: "POST",
         });
-        if (response.ok) {
+        if (response.status === 200) {
           generateEpubButton.textContent =
             "EPUB is being generated..., please refresh the page in a few seconds";
         } else {
