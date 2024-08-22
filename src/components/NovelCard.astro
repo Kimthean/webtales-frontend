@@ -1,5 +1,6 @@
 ---
 import formatRelativeTime from "@lib/formatRelativeTime";
+import { Image } from "astro:assets";
 
 const novels = Array.isArray(Astro.props.novels) ? Astro.props.novels : [];
 
@@ -25,10 +26,11 @@ const formatAuthor = (author: string) => {
       >
         <div class="flex flex-col sm:flex-row">
           {novel.thumbnail && (
-            <img
+            <Image
               class="h-full w-full min-w-48 object-contain max-sm:max-h-72 sm:h-auto sm:w-48 sm:object-cover"
               src={novel.thumbnail}
               alt={novel.title}
+              inferSize={true}
             />
           )}
           <div class="flex flex-grow flex-col justify-between p-4">

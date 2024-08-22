@@ -4,6 +4,7 @@ import Hr from "@components/Hr.astro";
 import Layout from "@layouts/Layout.astro";
 import { API_URL } from "@constants/index";
 import ChapterSection from "@components/ChapterSection";
+import { Image } from "astro:assets";
 
 const { id } = Astro.params;
 
@@ -39,7 +40,7 @@ const description = novel_description.slice(0, 160);
       <div class="lg:col-span-2">
         {
           novel.thumbnail && (
-            <img
+            <Image
               class="mx-auto w-52 max-w-sm rounded-lg object-cover shadow-lg sm:h-auto sm:w-full"
               width={200}
               height={200}
