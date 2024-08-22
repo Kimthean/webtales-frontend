@@ -45,9 +45,6 @@ const formatAuthor = (author: string) => {
                 </p>
               </div>
             </div>
-            {novel.translation_status === "in_progress" ? (
-              <p class="text-xs max-sm:pt-4">Translation Status: In Progress</p>
-            ) : null}
             <div class="mt-4 flex gap-4 text-xs text-skin-base">
               <div>
                 <span class="font-semibold">Author:</span>{" "}
@@ -64,7 +61,7 @@ const formatAuthor = (author: string) => {
               {novel.translation_status === "in_progress" && (
                 <div class="col-span-2 sm:col-span-3">
                   <span class="font-semibold">Status:</span>
-                  <span class="rounded-full">Translation in Progress</span>
+                  <span class="rounded-full">Translating</span>
                 </div>
               )}
             </div>
