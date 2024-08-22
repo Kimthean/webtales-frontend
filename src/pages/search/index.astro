@@ -1,7 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
 import SearchBar from "@/components/Search.tsx";
 import Main from "@/layouts/Main.astro";
 import { API_URL } from "@/constants/index";
@@ -20,5 +19,4 @@ const novels = await fetchNovels();
       <SearchBar client:load NovelList={novels} />
     </Main>
   </div>
-  <Footer />
 </Layout>

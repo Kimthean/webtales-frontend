@@ -109,7 +109,7 @@ const description = novel_description.slice(0, 160);
                 <button
                   id="generateEpubButton"
                   data-id={id}
-                  class="mt-4 block text-skin-accent hover:underline"
+                  class="mt-4 block text-skin-accent transition"
                 >
                   Generate EPUB
                 </button>
@@ -155,20 +155,6 @@ const description = novel_description.slice(0, 160);
       width: 8px;
     }
   }
-  .notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-  }
 
   @keyframes fadeIn {
     to {
@@ -201,14 +187,28 @@ const description = novel_description.slice(0, 160);
     if (generateEpubButton) {
       generateEpubButton.addEventListener("click", async () => {
         const id = generateEpubButton.dataset.id;
+        generateEpubButton.textContent = "Generating EPUB...";
+        (generateEpubButton as HTMLButtonElement).disabled = true;
+
         const response = await fetch(`/api/epub?id=${id}`, {
           method: "POST",
         });
+
         if (response.status === 200) {
-          generateEpubButton.textContent =
-            "EPUB is being generated..., please refresh the page in a few seconds";
+          let countdown = 10;
+          const interval = setInterval(() => {
+            if (countdown > 0) {
+              generateEpubButton.textContent = `EPUB is being generated... (${countdown}s)`;
+              countdown--;
+            } else {
+              clearInterval(interval);
+              generateEpubButton.textContent =
+                "Please refresh the page to download the EPUB";
+            }
+          }, 1000);
         } else {
           generateEpubButton.textContent = "Failed to generate EPUB";
+          (generateEpubButton as HTMLButtonElement).disabled = false;
         }
       });
     }

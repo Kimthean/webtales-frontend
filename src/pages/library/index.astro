@@ -1,5 +1,4 @@
 ---
-import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import NovelCard from "@/components/NovelCard.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -52,5 +51,4 @@ const nextUrl = currentPage < totalPages ? `?page=${currentPage + 1}` : "";
       nextUrl={nextUrl}
     />
   </Main>
-  <Footer />
 </Layout>

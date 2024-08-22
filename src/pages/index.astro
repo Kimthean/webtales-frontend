@@ -1,11 +1,9 @@
 ---
-import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import NovelCard from "@/components/NovelCard.astro";
 import Layout from "@/layouts/Layout.astro";
 import Main from "@/layouts/Main.astro";
 import { API_URL } from "@/constants/index";
-import type { Novel } from "@/types/novel";
 
 async function fetchLatestNovels() {
   const latestAddedResponse = await fetch(`${API_URL}/novel/latest`);
@@ -45,5 +43,4 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
       </div>
     </div>
   </Main>
-  <Footer />
 </Layout>
