@@ -61,7 +61,11 @@ console.log(novel);
           <span class="font-semibold">
             {isLatestUpdate ? "Last Updated:" : "Added:"}
           </span>{" "}
-          {formatRelativeTime(novel.CreatedAt)}
+          {
+            formatRelativeTime(
+              isLatestUpdate ? novel.last_chapter_date : novel.CreatedAt
+            )
+          }
         </div>
         {
           novel.translation_status === "in_progress" && (

@@ -27,7 +27,7 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
       <h2 class="pb-8 text-xl font-bold">Latest Added Novel</h2>
       <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
         {
-          latestAdded.map((novel: Novel) => (
+          latestAdded.map((novel: any) => (
             <NovelCard novel={novel} isLatestUpdate={false} />
           ))
         }
@@ -38,7 +38,7 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
       <h2 class="pb-8 text-xl font-bold">Latest Updated Novel</h2>
       <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
         {
-          latestUpdated.map((novel: Novel) => (
+          latestUpdated.map((novel: any) => (
             <NovelCard novel={novel} isLatestUpdate={true} />
           ))
         }
