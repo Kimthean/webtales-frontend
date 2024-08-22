@@ -1,11 +1,11 @@
-import { API_URL } from "@constants/index";
+import { API_URL } from "@/constants/index";
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const id = url.searchParams.get("id");
   try {
-    const res = await fetch(`${API_URL}/novels/convert-epub/${id}`, {
+    const res = await fetch(`${API_URL}/novel/convert-epub/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

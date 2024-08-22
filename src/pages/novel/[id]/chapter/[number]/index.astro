@@ -1,7 +1,7 @@
 ---
-import ChapterLayout from "@layouts/ChapterLayout.astro";
-import LinkButton from "@components/LinkButton.astro";
-import { API_URL } from "@constants/index";
+import ChapterLayout from "@/layouts/ChapterLayout.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { API_URL } from "@/constants/index";
 
 const { id, number } = Astro.params;
 
@@ -9,7 +9,7 @@ const getChapterData = async (
   id: string | undefined,
   chapterNumber: string | undefined
 ) => {
-  const res = await fetch(`${API_URL}/novels/${id}/chapter/${chapterNumber}`);
+  const res = await fetch(`${API_URL}/novel/${id}/chapter/${chapterNumber}`);
   if (!res.ok) {
     return null;
   }
@@ -17,7 +17,7 @@ const getChapterData = async (
 };
 
 const getChapterStats = async (id: string | undefined) => {
-  const res = await fetch(`${API_URL}/novels/chapters-stats/${id}`);
+  const res = await fetch(`${API_URL}/novel/chapters-stats/${id}`);
   if (!res.ok) {
     return null;
   }
@@ -42,10 +42,10 @@ const prevChapter = currentChapter > 1 ? currentChapter - 1 : null;
 const nextChapter = currentChapter < totalChapters ? currentChapter + 1 : null;
 
 const prevChapterUrl = prevChapter
-  ? `/novel/${id}/chapter/${prevChapter}/`
+  ? `/novel/${id}/chapter/${prevChapter}`
   : null;
 const nextChapterUrl = nextChapter
-  ? `/novel/${id}/chapter/${nextChapter}/`
+  ? `/novel/${id}/chapter/${nextChapter}`
   : null;
 ---
 
@@ -111,6 +111,25 @@ const nextChapterUrl = nextChapter
             value="16"
             class="accent-skin-accent w-full"
           />
+        </div>
+        <div class="mb-4">
+          <label for="fontWeight" class="mb-2 block"
+            >Font Weight: <span id="fontWeightValue">400</span></label
+          >
+          <select
+            id="fontWeight"
+            class="w-full rounded border border-skin-line bg-skin-fill p-2"
+          >
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
+          </select>
         </div>
         <div>
           <label for="fontFamily" class="mb-2 block">Font Family:</label>
@@ -216,77 +235,82 @@ const nextChapterUrl = nextChapter
       </LinkButton>
     </div>
   </div>
-  <script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
-    function handleKeyPress(event) {
-      if (event.key === "ArrowLeft" && prevChapterUrl) {
-        window.location.href = prevChapterUrl;
-      } else if (event.key === "ArrowRight" && nextChapterUrl) {
-        window.location.href = nextChapterUrl;
-      }
-    }
-
-    const debounce = (func, delay) => {
-      let timeoutId;
-      return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => func(...args), delay);
-      };
-    };
-
-    const updateStyles = debounce(() => {
-      const fontSize = document.getElementById("fontSize").value;
-      const fontFamily = document.getElementById("fontFamily").value;
-      document.documentElement.style.setProperty(
-        "--font-size",
-        `${fontSize}px`
-      );
-      document.documentElement.style.setProperty("--font-family", fontFamily);
-      document.getElementById("fontSizeValue").textContent = `${fontSize}px`;
-
-      localStorage.setItem("readerFontSize", fontSize);
-      localStorage.setItem("readerFontFamily", fontFamily);
-
-      if (fontFamily !== "'IBM Plex Mono', monospace") {
-        const fontName = fontFamily.split(",")[0].replace(/'/g, "");
-        const link = document.createElement("link");
-        link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(" ", "+")}&display=swap`;
-        link.rel = "stylesheet";
-        document.head.appendChild(link);
-      }
-    }, 300);
-
-    function loadPreferences() {
-      const fontSize = localStorage.getItem("readerFontSize") || "16";
-      const fontFamily =
-        localStorage.getItem("readerFontFamily") ||
-        "'IBM Plex Mono', monospace";
-
-      document.getElementById("fontSize").value = fontSize;
-      document.getElementById("fontFamily").value = fontFamily;
-
-      updateStyles();
-    }
-
-    document.getElementById("fontSize").addEventListener("input", updateStyles);
-    document
-      .getElementById("fontFamily")
-      .addEventListener("change", updateStyles);
-
-    document.getElementById("toggleSettings").addEventListener("click", () => {
-      const settingsMenu = document.getElementById("settingsMenu");
-      settingsMenu.classList.toggle("hidden");
-    });
-
-    // Load preferences when the page loads
-    loadPreferences();
-
-    document.addEventListener("keydown", handleKeyPress);
-
-    document.addEventListener("astro:before-swap", () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    });
-  </script>
 </ChapterLayout>
+<script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
+  function handleKeyPress(event) {
+    if (event.key === "ArrowLeft" && prevChapterUrl) {
+      window.location.href = prevChapterUrl;
+    } else if (event.key === "ArrowRight" && nextChapterUrl) {
+      window.location.href = nextChapterUrl;
+    }
+  }
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const updateStyles = debounce(() => {
+    const fontSize = document.getElementById("fontSize").value;
+    const fontWeight = document.getElementById("fontWeight").value;
+    const fontFamily = document.getElementById("fontFamily").value;
+    document.documentElement.style.setProperty("--font-size", `${fontSize}px`);
+    document.documentElement.style.setProperty("--font-weight", fontWeight);
+    document.documentElement.style.setProperty("--font-family", fontFamily);
+    document.getElementById("fontSizeValue").textContent = `${fontSize}px`;
+    document.getElementById("fontWeightValue").textContent = fontWeight;
+
+    localStorage.setItem("readerFontSize", fontSize);
+    localStorage.setItem("readerFontWeight", fontWeight);
+    localStorage.setItem("readerFontFamily", fontFamily);
+
+    if (fontFamily !== "'IBM Plex Mono', monospace") {
+      const fontName = fontFamily.split(",")[0].replace(/'/g, "");
+      const link = document.createElement("link");
+      link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(" ", "+")}&display=swap`;
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+  }, 300);
+
+  function loadPreferences() {
+    const fontSize = localStorage.getItem("readerFontSize") || "16";
+    const fontWeight = localStorage.getItem("readerFontWeight") || "400";
+    const fontFamily =
+      localStorage.getItem("readerFontFamily") || "'IBM Plex Mono', monospace";
+
+    document.getElementById("fontSize").value = fontSize;
+    document.getElementById("fontWeight").value = fontWeight;
+    document.getElementById("fontFamily").value = fontFamily;
+
+    updateStyles();
+  }
+
+  document.getElementById("fontSize").addEventListener("input", updateStyles);
+  document
+    .getElementById("fontWeight")
+    .addEventListener("change", updateStyles);
+  document
+    .getElementById("fontFamily")
+    .addEventListener("change", updateStyles);
+
+  document.getElementById("toggleSettings").addEventListener("click", () => {
+    const settingsMenu = document.getElementById("settingsMenu");
+    settingsMenu.classList.toggle("hidden");
+  });
+
+  // Load preferences when the page loads
+  loadPreferences();
+
+  document.addEventListener("keydown", handleKeyPress);
+
+  document.addEventListener("astro:before-swap", () => {
+    document.removeEventListener("keydown", handleKeyPress);
+  });
+</script>
 
 <style is:global>
   :root {
@@ -296,6 +320,7 @@ const nextChapterUrl = nextChapter
 
   .chapter-content {
     font-size: var(--font-size);
+    font-weight: var(--font-weight);
     font-family: var(--font-family);
   }
 </style>

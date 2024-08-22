@@ -3,33 +3,16 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@assets/*": [
-        "assets/*"
-      ],
-      "@config": [
-        "config.ts"
-      ],
-      "@components/*": [
-        "components/*"
-      ],
-      "@layouts/*": [
-        "layouts/*"
-      ],
-      "@pages/*": [
-        "pages/*"
-      ],
-      "@styles/*": [
-        "styles/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ],
-      "@lib/*": [
-        "lib/*"
-      ],
-      "@constants/*": [
-        "constants/*"
-      ]
+      "@/assets/*": ["assets/*"],
+      "@/config": ["config.ts"],
+      "@/components/*": ["components/*"],
+      "@/layouts/*": ["layouts/*"],
+      "@/pages/*": ["pages/*"],
+      "@/styles/*": ["styles/*"],
+      "@/utils/*": ["utils/*"],
+      "@/lib/*": ["lib/*"],
+      "@/constants/*": ["constants/*"],
+      "@/types/*": ["types/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "preact"

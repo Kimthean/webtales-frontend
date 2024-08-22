@@ -2,8 +2,8 @@ import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import Pagination from "./Pagination";
 import { API_URL } from "../constants/index";
-import "@styles/scrollbar.css";
-import formatRelativeTime from "@lib/formatRelativeTime";
+import "@/styles/scrollbar.css";
+import formatRelativeTime from "@/lib/formatRelativeTime";
 
 interface Chapter {
   translated_title: string;

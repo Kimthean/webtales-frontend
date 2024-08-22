@@ -2,15 +2,16 @@
 import Hr from "./Hr.astro";
 
 export interface Props {
-  activeNav?: "novels" | "bookmark" | "account" | "search";
+  activeNav?: "home" | "bookmark" | "account" | "search" | "library" | "novels";
 }
 
 const { activeNav } = Astro.props;
 
 const navItems = [
-  { href: "/", label: "Novels" },
-  // { href: "/bookmark/", label: "Bookmark" },
-  { href: "/acccount", label: "Account" },
+  { href: "/", label: "Home" },
+  { href: "/library", label: "Library" },
+  // { href: "/bookmark", label: "Bookmark" },
+  // { href: "/acccount", label: "Account" },
   { href: "/search", label: "Search", icon: true },
 ];
 ---

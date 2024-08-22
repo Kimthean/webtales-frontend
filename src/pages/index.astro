@@ -1,48 +1,49 @@
 ---
-import Footer from "@components/Footer.astro";
-import Header from "@components/Header.astro";
-import NovelCard from "@components/NovelCard.astro";
-import Layout from "@layouts/Layout.astro";
-import Main from "@layouts/Main.astro";
-import Pagination from "@components/Pagination.astro";
-import { API_URL } from "@constants/index";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import NovelCard from "@/components/NovelCard.astro";
+import Layout from "@/layouts/Layout.astro";
+import Main from "@/layouts/Main.astro";
+import { API_URL } from "@/constants/index";
+import type { Novel } from "@/types/novel";
 
-const currentPage = parseInt(Astro.url.searchParams.get("page") || "1");
-const limit = 15;
+async function fetchLatestNovels() {
+  const latestAddedResponse = await fetch(`${API_URL}/novel/latest`);
+  const latestUpdatedResponse = await fetch(`${API_URL}/novel/latest-update`);
 
-async function fetchNovels(page: number, limit: number) {
-  const response = await fetch(`${API_URL}/novels?page=${page}&limit=${limit}`);
-  return response.json();
+  const latestAdded = await latestAddedResponse.json();
+  const latestUpdated = await latestUpdatedResponse.json();
+
+  return { latestAdded, latestUpdated };
 }
 
-const { novels, totalPages } = await fetchNovels(currentPage, limit);
-
-const prevUrl = currentPage > 1 ? `?page=${currentPage - 1}` : "";
-const nextUrl = currentPage < totalPages ? `?page=${currentPage + 1}` : "";
+const { latestAdded, latestUpdated } = await fetchLatestNovels();
 ---
 
 <Layout>
-  <Header activeNav="novels" />
+  <Header activeNav="home" />
   <Main>
-    <div
-      class="mt-4 border-l-4 border-yellow-500 bg-yellow-100 p-4 text-yellow-700"
-    >
-      <p class="font-bold">Work in Progress</p>
-      <p>
-        Note: This site is currently under development and may contain errors or
-        inconsistencies between novels.
-      </p>
-    </div>
     <div class="flex flex-col py-8">
-      <NovelCard novels={novels} />
+      <h2 class="pb-8 text-xl font-bold">Latest Added Novel</h2>
+      <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
+        {
+          latestAdded.map((novel: Novel) => (
+            <NovelCard novel={novel} isLatestUpdate={false} />
+          ))
+        }
+      </div>
     </div>
 
-    <Pagination
-      currentPage={currentPage}
-      totalPages={totalPages}
-      prevUrl={prevUrl}
-      nextUrl={nextUrl}
-    />
+    <div class="flex flex-col py-8">
+      <h2 class="pb-8 text-xl font-bold">Latest Updated Novel</h2>
+      <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
+        {
+          latestUpdated.map((novel: Novel) => (
+            <NovelCard novel={novel} isLatestUpdate={true} />
+          ))
+        }
+      </div>
+    </div>
   </Main>
   <Footer />
 </Layout>

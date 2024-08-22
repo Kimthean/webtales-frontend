@@ -1,0 +1,40 @@
+---
+// ChapterNavigation.astro
+interface Props {
+  prevChapterUrl: string | null;
+  nextChapterUrl: string | null;
+  currentChapter: number;
+  totalChapters: number;
+}
+
+const { prevChapterUrl, nextChapterUrl, currentChapter, totalChapters } =
+  Astro.props;
+---
+
+<div class="my-8 flex items-center justify-between">
+  <a
+    href={prevChapterUrl || "#"}
+    class={`rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base ${!prevChapterUrl ? "opacity-50 cursor-not-allowed" : ""}`}
+    aria-disabled={!prevChapterUrl}
+  >
+    {prevChapterUrl ? "Previous Chapter" : "First Chapter"}
+  </a>
+
+  <span class="text-gray-400 max-sm:hidden">
+    Chapter {currentChapter} of {totalChapters}
+  </span>
+
+  <a
+    href={nextChapterUrl || "#"}
+    class={`rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base ${!nextChapterUrl ? "opacity-50 cursor-not-allowed" : ""}`}
+    aria-disabled={!nextChapterUrl}
+  >
+    {nextChapterUrl ? "Next Chapter" : "Last Chapter"}
+  </a>
+</div>
+
+<div class="flex items-center justify-center pt-8 sm:hidden">
+  <span class="text-gray-400">
+    Chapter {currentChapter} of {totalChapters}
+  </span>
+</div>

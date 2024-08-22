@@ -1,9 +1,8 @@
 ---
-import Header from "@components/Header.astro";
-import Hr from "@components/Hr.astro";
-import Layout from "@layouts/Layout.astro";
-import { API_URL } from "@constants/index";
-import ChapterSection from "@components/ChapterSection";
+import Header from "@/components/Header.astro";
+import Layout from "@/layouts/Layout.astro";
+import { API_URL } from "@/constants/index";
+import ChapterSection from "@/components/ChapterSection";
 import { Image } from "astro:assets";
 
 const { id } = Astro.params;
@@ -12,7 +11,7 @@ const initialPage = parseInt(Astro.url.searchParams.get("page") || "1");
 const pageSize = 100;
 
 const getNovelData = async (id: string | undefined) => {
-  const res = await fetch(`${API_URL}/novels/${id}`);
+  const res = await fetch(`${API_URL}/novel/${id}`);
   if (!res.ok) {
     return null;
   }

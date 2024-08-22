@@ -1,6 +1,6 @@
 import { h } from "preact";
 import { useState, useRef, useEffect } from "preact/hooks";
-import "@styles/scrollbar.css";
+import "@/styles/scrollbar.css";
 
 interface PaginationProps {
   currentPage: number;

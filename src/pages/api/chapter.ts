@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { API_URL } from "../../constants/index";
+import { API_URL } from "@/constants/index";
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ request }) => {
 
   try {
     const response = await fetch(
-      `${API_URL}/novels/${id}/paginate-chapters?page=${page}&pageSize=${pageSize}`
+      `${API_URL}/novel/${id}/paginate-chapters?page=${page}&pageSize=${pageSize}`
     );
     const data = await response.json();
 
