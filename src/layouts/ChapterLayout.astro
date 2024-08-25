@@ -1,11 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
+import ChapterModal from "@/components/ChapterModal";
 
 interface Props {
   chapter_title: string;
   novel_name: string;
 }
+
+const { id } = Astro.params;
 
 const { chapter_title, novel_name } = Astro.props;
 ---
@@ -45,6 +48,9 @@ const { chapter_title, novel_name } = Astro.props;
           d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
       </svg>
     </button>
+    <div id="chapterButton">
+      <ChapterModal id={id || ""} client:only="preact" />
+    </div>
     <button
       id="goToBottom"
       class="rounded-full bg-skin-fill p-2 opacity-50 shadow-lg transition-opacity"
@@ -86,10 +92,12 @@ const { chapter_title, novel_name } = Astro.props;
   function handleScroll() {
     const goToTopButton = document.getElementById("goToTop");
     const goToBottomButton = document.getElementById("goToBottom");
+    const chapterButton = document.getElementById("chapterButton");
 
     if (goToTopButton && goToBottomButton) {
       goToTopButton.style.display = "none";
       goToBottomButton.style.display = "none";
+      chapterButton.style.display = "none";
     }
 
     window.clearTimeout(isScrolling);
@@ -98,6 +106,7 @@ const { chapter_title, novel_name } = Astro.props;
       if (goToTopButton && goToBottomButton) {
         goToTopButton.style.display = "block";
         goToBottomButton.style.display = "block";
+        chapterButton.style.display = "block";
       }
     }, 800);
   }
