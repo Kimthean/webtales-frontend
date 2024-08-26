@@ -1,59 +1,29 @@
-<div id="adblock-message" style="display: none;">
+
+
+<div
+  id="adblock-message"
+  class="fixed left-0 top-0 z-50 hidden w-full bg-yellow-400 p-2 text-center text-black"
+>
   <p>Please disable your ad blocker to support our website.</p>
   <p>Disable ad blocker then refresh the page.</p>
 </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const adBlockMessage = document.getElementById("adblock-message");
-    const adContainer = document.createElement("div");
-    adContainer.className = "ad-container";
-    adContainer.style.display = "none";
-    document.body.appendChild(adContainer);
-
-    function checkAdBlock() {
-      if (adContainer.offsetHeight === 0) {
-        if (adBlockMessage) {
-          adBlockMessage.style.display = "block";
-        } else {
-          console.error("Ad block message element not found.");
-        }
-      } else {
-        if (adBlockMessage) {
-          adBlockMessage.style.display = "none";
-        }
+<script type="module">
+  const adBlockDetectionScript = function detectAdBlock() {
+    let adBlockEnabled = false;
+    const ad = document.createElement("div");
+    ad.innerHTML = "&nbsp;";
+    ad.className = "adsbox";
+    document.body.appendChild(ad);
+    window.setTimeout(function () {
+      if (ad.offsetHeight === 0) {
+        adBlockEnabled = true;
       }
-    }
-
-    const checkInterval = 4000;
-    const maxChecks = 10;
-    let checks = 0;
-
-    const intervalId = setInterval(() => {
-      checkAdBlock();
-      checks++;
-      if (checks >= maxChecks) {
-        clearInterval(intervalId);
-        document.body.removeChild(adContainer);
+      ad.remove();
+      if (adBlockEnabled) {
+        console.log("AdBlock is enabled");
       }
-    }, checkInterval);
-
-    setTimeout(() => {
-      checkAdBlock();
-    }, 4000);
-  });
+    }, 100);
+  };
+  adBlockDetectionScript();
 </script>
-
-<style>
-  #adblock-message {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #ffcc00;
-    color: #000;
-    text-align: center;
-    padding: 10px;
-    z-index: 1000;
-  }
-</style>
