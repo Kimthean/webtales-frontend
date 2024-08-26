@@ -92,23 +92,20 @@ const { chapter_title, novel_name } = Astro.props;
   function handleScroll() {
     const goToTopButton = document.getElementById("goToTop");
     const goToBottomButton = document.getElementById("goToBottom");
-    const chapterButton = document.getElementById("chapterButton");
 
-    if (goToTopButton && goToBottomButton) {
-      goToTopButton.style.display = "none";
-      goToBottomButton.style.display = "none";
-      chapterButton.style.display = "none";
-    }
+    // if (goToTopButton && goToBottomButton) {
+    //   goToTopButton.style.display = "none";
+    //   goToBottomButton.style.display = "none";
+    // }
 
-    window.clearTimeout(isScrolling);
+    // window.clearTimeout(isScrolling);
 
-    isScrolling = setTimeout(function () {
-      if (goToTopButton && goToBottomButton) {
-        goToTopButton.style.display = "block";
-        goToBottomButton.style.display = "block";
-        chapterButton.style.display = "block";
-      }
-    }, 800);
+    // isScrolling = setTimeout(function () {
+    //   if (goToTopButton && goToBottomButton) {
+    //     goToTopButton.style.display = "block";
+    //     goToBottomButton.style.display = "block";
+    //   }
+    // }, 800);
   }
 
   function initializeButtons() {
