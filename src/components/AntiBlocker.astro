@@ -25,9 +25,18 @@
       }
     }
 
-    checkAdBlock();
+    const checkInterval = 1000;
+    const maxChecks = 10;
+    let checks = 0;
 
-    document.body.removeChild(adContainer);
+    const intervalId = setInterval(() => {
+      checkAdBlock();
+      checks++;
+      if (checks >= maxChecks) {
+        clearInterval(intervalId);
+        document.body.removeChild(adContainer);
+      }
+    }, checkInterval);
   });
 </script>
 
