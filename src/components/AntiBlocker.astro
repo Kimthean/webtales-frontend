@@ -11,11 +11,21 @@
     adContainer.style.display = "none";
     document.body.appendChild(adContainer);
 
-    if (adContainer.offsetHeight === 0) {
-      if (adBlockMessage) {
-        adBlockMessage.style.display = "block";
+    function checkAdBlock() {
+      if (adContainer.offsetHeight === 0) {
+        if (adBlockMessage) {
+          adBlockMessage.style.display = "block";
+        } else {
+          console.error("Ad block message element not found.");
+        }
+      } else {
+        if (adBlockMessage) {
+          adBlockMessage.style.display = "none";
+        }
       }
     }
+
+    checkAdBlock();
 
     document.body.removeChild(adContainer);
   });
