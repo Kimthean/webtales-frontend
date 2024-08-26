@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import ChapterModal from "@/components/ChapterModal";
+import AdBanner from "@/components/AdBanner.astro";
 
 interface Props {
   chapter_title: string;
@@ -15,6 +16,7 @@ const { chapter_title, novel_name } = Astro.props;
 
 <Layout title={novel_name + " | " + chapter_title}>
   <Header activeNav="novels" />
+
   <div
     class="progress-container fixed left-0 top-0 z-10 h-1 w-full bg-skin-fill"
   >

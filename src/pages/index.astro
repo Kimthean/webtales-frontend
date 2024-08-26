@@ -4,6 +4,8 @@ import NovelCard from "@/components/NovelCard.astro";
 import Layout from "@/layouts/Layout.astro";
 import Main from "@/layouts/Main.astro";
 import { API_URL } from "@/constants/index";
+import DiscordAd from "@/components/DiscordAd.astro";
+import LinkButton from "@/components/LinkButton.astro";
 
 async function fetchLatestNovels() {
   const latestAddedResponse = await fetch(`${API_URL}/novel/latest`);
@@ -21,8 +23,22 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
 <Layout>
   <Header activeNav="home" />
   <Main>
-    <div class="flex flex-col py-8">
-      <h2 class="pb-8 text-xl font-bold">Latest Added Novel</h2>
+    <DiscordAd />
+    <div class="flex flex-col py-4">
+      <div class="flex items-center pb-4">
+        <h2 class="text-lg font-bold sm:text-xl">Latest Added Novel</h2>
+        <LinkButton href="/library" className="ml-auto flex items-center">
+          View All <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
+            ></path>
+          </svg>
+        </LinkButton>
+      </div>
       <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
         {
           latestAdded.map((novel: any) => (
@@ -32,8 +48,21 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
       </div>
     </div>
 
-    <div class="flex flex-col py-8">
-      <h2 class="pb-8 text-xl font-bold">Latest Updated Novel</h2>
+    <div class="flex flex-col py-4">
+      <div class="flex items-center pb-4">
+        <h2 class="text-lg font-bold sm:text-xl">Latest Updated Novel</h2>
+        <LinkButton href="/library" className="ml-auto flex items-center">
+          View All <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
+            ></path>
+          </svg>
+        </LinkButton>
+      </div>
       <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
         {
           latestUpdated.map((novel: any) => (
