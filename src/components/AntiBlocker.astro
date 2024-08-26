@@ -1,0 +1,36 @@
+<div id="adblock-message" style="display: none;">
+  <p>Please disable your ad blocker to support our website.</p>
+  <p>Disable ad blocker then refresh the page.</p>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const adBlockMessage = document.getElementById("adblock-message");
+    const adContainer = document.createElement("div");
+    adContainer.className = "ad-container";
+    adContainer.style.display = "none";
+    document.body.appendChild(adContainer);
+
+    if (adContainer.offsetHeight === 0) {
+      if (adBlockMessage) {
+        adBlockMessage.style.display = "block";
+      }
+    }
+
+    document.body.removeChild(adContainer);
+  });
+</script>
+
+<style>
+  #adblock-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    z-index: 1000;
+  }
+</style>

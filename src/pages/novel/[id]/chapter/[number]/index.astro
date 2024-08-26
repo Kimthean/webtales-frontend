@@ -3,6 +3,7 @@ import ChapterLayout from "@/layouts/ChapterLayout.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { API_URL } from "@/constants/index";
 import AdBanner from "@/components/AdBanner.astro";
+import AntiBlocker from "@/components/AntiBlocker.astro";
 
 const { id, number } = Astro.params;
 
@@ -57,6 +58,7 @@ const nextChapterUrl = nextChapter
   }
   chapter_title={chapter.translated_title}
 >
+  <AntiBlocker />
   <div class="container mx-auto max-w-3xl sm:py-8">
     <div class="flex items-center justify-between sm:mb-6">
       <a
