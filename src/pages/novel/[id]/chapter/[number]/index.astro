@@ -236,7 +236,9 @@ const nextChapterUrl = nextChapter
         {nextChapter ? <span>Next Chapter</span> : <span>Last Chapter</span>}
       </LinkButton>
     </div>
-    <AdBanner />
+    <div class="py-4">
+      <AdBanner />
+    </div>
   </div>
 </ChapterLayout>
 <script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
