@@ -25,7 +25,7 @@
       }
     }
 
-    const checkInterval = 1000;
+    const checkInterval = 4000;
     const maxChecks = 10;
     let checks = 0;
 
@@ -37,6 +37,10 @@
         document.body.removeChild(adContainer);
       }
     }, checkInterval);
+
+    setTimeout(() => {
+      checkAdBlock();
+    }, 4000);
   });
 </script>
 
