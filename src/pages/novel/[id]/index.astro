@@ -4,7 +4,6 @@ import Layout from "@/layouts/Layout.astro";
 import { API_URL } from "@/constants/index";
 import ChapterSection from "@/components/ChapterSection";
 import { Image } from "astro:assets";
-import AdBanner from "@/components/AdBanner.astro";
 
 const { id } = Astro.params;
 
@@ -133,9 +132,6 @@ const description = novel_description.slice(0, 160);
         client:only="preact"
       />
     </div>
-  </div>
-  <div class="py-2">
-    <AdBanner />
   </div>
 </Layout>
 

@@ -2,8 +2,6 @@
 import ChapterLayout from "@/layouts/ChapterLayout.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { API_URL } from "@/constants/index";
-import AdBanner from "@/components/AdBanner.astro";
-import AntiBlocker from "@/components/AntiBlocker.astro";
 
 const { id, number } = Astro.params;
 
@@ -190,7 +188,6 @@ const nextChapterUrl = nextChapter
       </LinkButton>
     </div>
     <div class="chapter-content mb-8 space-y-4">
-      <AdBanner />
       {
         paragraphs.map((paragraph: string) => (
           <p class="overflow-x-hidden text-pretty leading-relaxed">
@@ -236,9 +233,6 @@ const nextChapterUrl = nextChapter
       >
         {nextChapter ? <span>Next Chapter</span> : <span>Last Chapter</span>}
       </LinkButton>
-    </div>
-    <div class="py-4">
-      <AdBanner />
     </div>
   </div>
 </ChapterLayout>
