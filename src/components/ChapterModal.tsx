@@ -1,9 +1,9 @@
 import { useEffect, useState } from "preact/hooks";
-import ChapterSection from "./ChapterSection";
+import ChapterList from "./ChapterList";
 
 function ChapterModal({ id }: { id: string }) {
   const [open, setOpen] = useState(false);
-  
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -26,7 +26,7 @@ function ChapterModal({ id }: { id: string }) {
     <div class="relative">
       <button
         onClick={() => setOpen(!open)}
-        class="p-2 opacity-50 transition-all"
+        class="rounded-full bg-skin-card-muted p-2 opacity-50 transition-all"
         aria-label="Toggle chapters"
       >
         <svg
@@ -46,7 +46,7 @@ function ChapterModal({ id }: { id: string }) {
       </button>
       {open && (
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-skin-fill p-4 shadow-xl">
+          <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-skin-card p-4">
             <div class="flex justify-end">
               <button
                 onClick={() => setOpen(false)}
@@ -69,7 +69,7 @@ function ChapterModal({ id }: { id: string }) {
                 </svg>
               </button>
             </div>
-            <ChapterSection id={id} pageSize={100} initialPage={1} />
+            <ChapterList id={id} pageSize={100} initialPage={1} />
           </div>
         </div>
       )}

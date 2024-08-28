@@ -1,6 +1,8 @@
+import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
+import Cookie from "js-cookie";
 
-export default function SettingsPanel() {
+const SettingsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [fontSize, setFontSize] = useState("16");
   const [fontWeight, setFontWeight] = useState("400");
@@ -8,11 +10,11 @@ export default function SettingsPanel() {
   const [isAutoFetchEnabled, setIsAutoFetchEnabled] = useState(false);
 
   useEffect(() => {
-    const storedFontSize = localStorage.getItem("readerFontSize") || "16";
-    const storedFontWeight = localStorage.getItem("readerFontWeight") || "400";
+    const storedFontSize = Cookie.get("readerFontSize") || "16";
+    const storedFontWeight = Cookie.get("readerFontWeight") || "400";
     const storedFontFamily =
-      localStorage.getItem("readerFontFamily") || "'IBM Plex Mono', monospace";
-    const storedAutoFetch = localStorage.getItem("autoFetchEnabled") === "true";
+      Cookie.get("readerFontFamily") || "'IBM Plex Mono', monospace";
+    const storedAutoFetch = Cookie.get("autoFetchEnabled") === "true";
 
     setFontSize(storedFontSize);
     setFontWeight(storedFontWeight);
@@ -29,38 +31,47 @@ export default function SettingsPanel() {
   };
 
   const handleSettingChange = (setting: string, value: string) => {
+    let newFontSize = fontSize;
+    let newFontWeight = fontWeight;
+    let newFontFamily = fontFamily;
+
     switch (setting) {
       case "fontSize":
         setFontSize(value);
-        localStorage.setItem("readerFontSize", value);
+        Cookie.set("readerFontSize", value);
+        newFontSize = value;
         break;
       case "fontWeight":
         setFontWeight(value);
-        localStorage.setItem("readerFontWeight", value);
+        Cookie.set("readerFontWeight", value);
+        newFontWeight = value;
         break;
       case "fontFamily":
         setFontFamily(value);
-        localStorage.setItem("readerFontFamily", value);
+        Cookie.set("readerFontFamily", value);
+        newFontFamily = value;
         break;
     }
-    updateStyles(fontSize, fontWeight, fontFamily);
+    updateStyles(newFontSize, newFontWeight, newFontFamily);
   };
 
-  const handleAutoFetchChange = (e: Event) => {
-    const isChecked = (e.target as HTMLInputElement).checked;
+  const handleAutoFetchChange = (e: any) => {
+    const isChecked = e.target.checked;
     setIsAutoFetchEnabled(isChecked);
-    localStorage.setItem("autoFetchEnabled", isChecked.toString());
+    Cookie.set("autoFetchEnabled", isChecked.toString());
+    window.location.reload();
   };
 
   return (
-    <div class="settings-panel mb-6">
+    <div className="settings-panel relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        class="flex transform items-center justify-center rounded-full bg-skin-card px-4 py-2 text-center shadow-2xl transition duration-300 ease-in-out hover:scale-105 hover:bg-skin-card-muted"
+        className="flex transform items-center justify-center rounded-full bg-skin-card-muted p-2 text-center opacity-50 transition duration-300 ease-in-out hover:scale-105"
+        aria-label="Settings"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="inline-block h-5 w-5 sm:mr-2"
+          class="inline-block size-6"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -70,14 +81,13 @@ export default function SettingsPanel() {
             clip-rule="evenodd"
           ></path>
         </svg>
-        <p class="hidden sm:block">Settings</p>
       </button>
       {isOpen && (
-        <div class="mt-4 rounded-lg bg-skin-card p-6 shadow-lg">
-          <h3 class="mb-4 text-lg font-semibold">Reading Preferences</h3>
-          <div class="mb-4">
-            <label for="fontSize" class="mb-2 block">
-              Font Size: <span>{fontSize}px</span>
+        <div className="absolute bottom-full right-0 mb-2 w-72 rounded-lg bg-skin-card p-4 shadow-lg">
+          <h3 className="mb-2 text-sm font-semibold">Reading Preferences</h3>
+          <div className="mb-2 flex items-center justify-between">
+            <label htmlFor="fontSize" className="text-xs">
+              Font Size
             </label>
             <select
               id="fontSize"
@@ -85,7 +95,7 @@ export default function SettingsPanel() {
               onChange={e =>
                 handleSettingChange("fontSize", e.currentTarget.value)
               }
-              class="w-full rounded border border-skin-line bg-skin-fill p-2"
+              className="w-1/2 rounded border border-skin-line bg-skin-fill p-1 text-xs"
             >
               {[12, 14, 16, 18, 20, 22, 24].map(size => (
                 <option key={size} value={size}>
@@ -94,9 +104,9 @@ export default function SettingsPanel() {
               ))}
             </select>
           </div>
-          <div class="mb-4">
-            <label for="fontWeight" class="mb-2 block">
-              Font Weight: <span>{fontWeight}</span>
+          <div className="mb-2 flex items-center justify-between">
+            <label htmlFor="fontWeight" className="text-xs">
+              Font Weight
             </label>
             <select
               id="fontWeight"
@@ -104,7 +114,7 @@ export default function SettingsPanel() {
               onChange={e =>
                 handleSettingChange("fontWeight", e.currentTarget.value)
               }
-              class="w-full rounded border border-skin-line bg-skin-fill p-2"
+              className="w-1/2 rounded border border-skin-line bg-skin-fill p-1 text-xs"
             >
               {[100, 200, 300, 400, 500, 600, 700, 800, 900].map(weight => (
                 <option key={weight} value={weight}>
@@ -113,9 +123,9 @@ export default function SettingsPanel() {
               ))}
             </select>
           </div>
-          <div class="mb-4">
-            <label for="fontFamily" class="mb-2 block">
-              Font Family:
+          <div className="mb-2 flex items-center justify-between">
+            <label htmlFor="fontFamily" className="text-xs">
+              Font Family
             </label>
             <select
               id="fontFamily"
@@ -123,36 +133,31 @@ export default function SettingsPanel() {
               onChange={e =>
                 handleSettingChange("fontFamily", e.currentTarget.value)
               }
-              class="w-full rounded border border-skin-line bg-skin-fill p-2"
+              className="w-1/2 rounded border border-skin-line bg-skin-fill p-1 text-xs"
             >
               <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
               <option value="'Roboto', sans-serif">Roboto</option>
               <option value="'Open Sans', sans-serif">Open Sans</option>
               <option value="'Lato', sans-serif">Lato</option>
               <option value="'Merriweather', serif">Merriweather</option>
-              <option value="'Source Sans Pro', sans-serif">
-                Source Sans Pro
-              </option>
-              <option value="'Nunito', sans-serif">Nunito</option>
-              <option value="'Ubuntu', sans-serif">Ubuntu</option>
-              <option value="'Fira Sans', sans-serif">Fira Sans</option>
-              <option value="'Noto Sans', sans-serif">Noto Sans</option>
             </select>
           </div>
-          <div class="mt-4">
-            <label for="autoFetch" class="flex items-center">
-              <input
-                type="checkbox"
-                id="autoFetch"
-                checked={isAutoFetchEnabled}
-                onChange={handleAutoFetchChange}
-                class="mr-2"
-              />
-              Enable Auto-Fetch Next Chapter
+          <div className="mt-2 flex items-center">
+            <input
+              type="checkbox"
+              id="autoFetch"
+              checked={isAutoFetchEnabled}
+              onChange={handleAutoFetchChange}
+              className="mr-2"
+            />
+            <label htmlFor="autoFetch" className="text-xs">
+              Infinite Scroll
             </label>
           </div>
         </div>
       )}
     </div>
   );
-}
+};
+
+export default SettingsPanel;

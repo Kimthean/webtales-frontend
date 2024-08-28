@@ -2,6 +2,7 @@
 import ChapterLayout from "@/layouts/ChapterLayout.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { API_URL } from "@/constants/index";
+import { InfiniteScrollChapter } from "@/components/InfiniteScrollChapter";
 
 const { id, number } = Astro.params;
 
@@ -47,13 +48,15 @@ const prevChapterUrl = prevChapter
 const nextChapterUrl = nextChapter
   ? `/novel/${id}/chapter/${nextChapter}`
   : null;
+
+const isInfiniteScrollEnabled =
+  Astro.cookies.get("autoFetchEnabled")?.value === "true";
 ---
 
 <ChapterLayout
   novel_name={chapter.novel_title.replace(/\b\w/g, (char: string) =>
     char.toUpperCase()
   )}
-  }
   chapter_title={chapter.translated_title}
 >
   <div class="container mx-auto max-w-3xl sm:py-8">
@@ -76,233 +79,136 @@ const nextChapterUrl = nextChapter
         Back to Novel
       </a>
     </div>
-    <div class="settings-panel mb-6">
-      <button
-        id="toggleSettings"
-        class="flex transform items-center justify-center rounded-full bg-skin-card px-4 py-2 text-center shadow-2xl transition duration-300 ease-in-out hover:scale-105 hover:bg-skin-card-muted"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="inline-block h-5 w-5 sm:mr-2"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-            clip-rule="evenodd"></path>
-        </svg>
-        <p class="hidden sm:block">Settings</p>
-      </button>
-      <div
-        id="settingsMenu"
-        class="mt-4 hidden rounded-lg bg-skin-card p-6 shadow-lg"
-      >
-        <h3 class="mb-4 text-lg font-semibold">Reading Preferences</h3>
-        <div class="mb-4">
-          <label for="fontSize" class="mb-2 block"
-            >Font Size: <span id="fontSizeValue">16px</span></label
-          >
-          <input
-            type="range"
-            id="fontSize"
-            min="12"
-            max="24"
-            value="16"
-            class="accent-skin-accent w-full"
-          />
-        </div>
-        <div class="mb-4">
-          <label for="fontWeight" class="mb-2 block"
-            >Font Weight: <span id="fontWeightValue">400</span></label
-          >
-          <select
-            id="fontWeight"
-            class="w-full rounded border border-skin-line bg-skin-fill p-2"
-          >
-            <option value="100">100</option>
-            <option value="200">200</option>
-            <option value="300">300</option>
-            <option value="400">400</option>
-            <option value="500">500</option>
-            <option value="600">600</option>
-            <option value="700">700</option>
-            <option value="800">800</option>
-            <option value="900">900</option>
-          </select>
-        </div>
-        <div>
-          <label for="fontFamily" class="mb-2 block">Font Family:</label>
-          <select
-            id="fontFamily"
-            class="w-full rounded border border-skin-line bg-skin-fill p-2"
-          >
-            <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
-            <option value="'Roboto', sans-serif">Roboto</option>
-            <option value="'Open Sans', sans-serif">Open Sans</option>
-            <option value="'Lato', sans-serif">Lato</option>
-            <option value="'Merriweather', serif">Merriweather</option>
-            <option value="'Source Sans Pro', sans-serif"
-              >Source Sans Pro</option
-            >
-            <option value="'Nunito', sans-serif">Nunito</option>
-            <option value="'Ubuntu', sans-serif">Ubuntu</option>
-            <option value="'Fira Sans', sans-serif">Fira Sans</option>
-            <option value="'Noto Sans', sans-serif">Noto Sans</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <h1 class="mb-6 text-xl font-bold sm:text-3xl">
-      {chapter.translated_title}
-    </h1>
-    <div class="my-8 flex items-center justify-between">
-      <LinkButton
-        href={prevChapterUrl || "#"}
-        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
-        disabled={!prevChapter}
-        ariaLabel={prevChapter
-          ? "Go to previous chapter"
-          : "No previous chapter"}
-      >
-        {
-          prevChapter ? (
-            <span>Previous Chapter</span>
-          ) : (
-            <span>First Chapter</span>
-          )
-        }
-      </LinkButton>
-
-      <span class="text-gray-400 max-sm:hidden">
-        Chapter {currentChapter} of {totalChapters}
-      </span>
-
-      <LinkButton
-        href={nextChapterUrl || "#"}
-        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
-        disabled={!nextChapter}
-        ariaLabel={nextChapter ? "Go to next chapter" : "No next chapter"}
-      >
-        {nextChapter ? <span>Next Chapter</span> : <span>Last Chapter</span>}
-      </LinkButton>
-    </div>
-    <div class="chapter-content mb-8 space-y-4">
+    <div>
       {
-        paragraphs.map((paragraph: string) => (
-          <p class="overflow-x-hidden text-pretty leading-relaxed">
-            {paragraph}
-          </p>
-        ))
+        isInfiniteScrollEnabled ? (
+          <InfiniteScrollChapter
+            novelId={id!}
+            initialChapterNumber={number?.toString()!}
+            client:only="preact"
+          />
+        ) : (
+          <div>
+            <h1 class="mb-6 text-xl font-bold sm:text-3xl">
+              {chapter.translated_title}
+            </h1>
+            <div class="my-8 flex items-center justify-between">
+              <LinkButton
+                href={prevChapterUrl || "#"}
+                className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
+                disabled={!prevChapter}
+                ariaLabel={
+                  prevChapter ? "Go to previous chapter" : "No previous chapter"
+                }
+              >
+                {prevChapter ? (
+                  <span>Previous Chapter</span>
+                ) : (
+                  <span>First Chapter</span>
+                )}
+              </LinkButton>
+
+              <span class="text-gray-400 max-sm:hidden">
+                Chapter {currentChapter} of {totalChapters}
+              </span>
+
+              <LinkButton
+                href={nextChapterUrl || "#"}
+                className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
+                disabled={!nextChapter}
+                ariaLabel={
+                  nextChapter ? "Go to next chapter" : "No next chapter"
+                }
+              >
+                {nextChapter ? (
+                  <span>Next Chapter</span>
+                ) : (
+                  <span>Last Chapter</span>
+                )}
+              </LinkButton>
+            </div>
+            <div class="chapter-content mb-8 space-y-4">
+              {paragraphs.map((paragraph: string) => (
+                <p class="overflow-x-hidden text-pretty leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            <div class="flex items-center justify-center pt-8 sm:hidden">
+              <span class="text-gray-400">
+                Chapter {currentChapter} of {totalChapters}
+              </span>
+            </div>
+            <div class="mt-8 flex items-center justify-between">
+              <LinkButton
+                href={prevChapterUrl || "#"}
+                className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
+                disabled={!prevChapter}
+                ariaLabel={
+                  prevChapter ? "Go to previous chapter" : "No previous chapter"
+                }
+              >
+                {prevChapter ? (
+                  <span>Previous Chapter</span>
+                ) : (
+                  <span>First Chapter</span>
+                )}
+              </LinkButton>
+
+              <span class="text-gray-400 max-sm:hidden">
+                Chapter {currentChapter} of {totalChapters}
+              </span>
+
+              <LinkButton
+                href={nextChapterUrl || "#"}
+                className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
+                disabled={!nextChapter}
+                ariaLabel={
+                  nextChapter ? "Go to next chapter" : "No next chapter"
+                }
+              >
+                {nextChapter ? (
+                  <span>Next Chapter</span>
+                ) : (
+                  <span>Last Chapter</span>
+                )}
+              </LinkButton>
+            </div>
+          </div>
+        )
       }
-    </div>
-
-    <div class="flex items-center justify-center pt-8 sm:hidden">
-      <span class="text-gray-400">
-        Chapter {currentChapter} of {totalChapters}
-      </span>
-    </div>
-
-    <div class="mt-8 flex items-center justify-between">
-      <LinkButton
-        href={prevChapterUrl || "#"}
-        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
-        disabled={!prevChapter}
-        ariaLabel={prevChapter
-          ? "Go to previous chapter"
-          : "No previous chapter"}
-      >
-        {
-          prevChapter ? (
-            <span>Previous Chapter</span>
-          ) : (
-            <span>First Chapter</span>
-          )
-        }
-      </LinkButton>
-
-      <span class="text-gray-400 max-sm:hidden">
-        Chapter {currentChapter} of {totalChapters}
-      </span>
-
-      <LinkButton
-        href={nextChapterUrl || "#"}
-        className="rounded border px-2 py-2 text-sm font-bold hover:border-skin-line sm:px-4 sm:text-base"
-        disabled={!nextChapter}
-        ariaLabel={nextChapter ? "Go to next chapter" : "No next chapter"}
-      >
-        {nextChapter ? <span>Next Chapter</span> : <span>Last Chapter</span>}
-      </LinkButton>
     </div>
   </div>
 </ChapterLayout>
 <script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
   function handleKeyPress(event) {
     if (event.key === "ArrowLeft" && prevChapterUrl) {
+      loadPreferences();
       window.location.href = prevChapterUrl;
     } else if (event.key === "ArrowRight" && nextChapterUrl) {
+      loadPreferences();
       window.location.href = nextChapterUrl;
     }
   }
 
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  };
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
+  }
 
-  const updateStyles = debounce(() => {
-    const fontSize = document.getElementById("fontSize").value;
-    const fontWeight = document.getElementById("fontWeight").value;
-    const fontFamily = document.getElementById("fontFamily").value;
+  function loadPreferences() {
+    const fontSize = getCookie("readerFontSize") || "16";
+    const fontWeight = getCookie("readerFontWeight") || "400";
+    const fontFamily =
+      getCookie("readerFontFamily") || "'IBM Plex Mono', monospace";
+
     document.documentElement.style.setProperty("--font-size", `${fontSize}px`);
     document.documentElement.style.setProperty("--font-weight", fontWeight);
     document.documentElement.style.setProperty("--font-family", fontFamily);
-    document.getElementById("fontSizeValue").textContent = `${fontSize}px`;
-    document.getElementById("fontWeightValue").textContent = fontWeight;
-
-    localStorage.setItem("readerFontSize", fontSize);
-    localStorage.setItem("readerFontWeight", fontWeight);
-    localStorage.setItem("readerFontFamily", fontFamily);
-
-    if (fontFamily !== "'IBM Plex Mono', monospace") {
-      const fontName = fontFamily.split(",")[0].replace(/'/g, "");
-      const link = document.createElement("link");
-      link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(" ", "+")}&display=swap`;
-      link.rel = "stylesheet";
-      document.head.appendChild(link);
-    }
-  }, 300);
-
-  function loadPreferences() {
-    const fontSize = localStorage.getItem("readerFontSize") || "16";
-    const fontWeight = localStorage.getItem("readerFontWeight") || "400";
-    const fontFamily =
-      localStorage.getItem("readerFontFamily") || "'IBM Plex Mono', monospace";
-
-    document.getElementById("fontSize").value = fontSize;
-    document.getElementById("fontWeight").value = fontWeight;
-    document.getElementById("fontFamily").value = fontFamily;
-
-    updateStyles();
   }
 
-  document.getElementById("fontSize").addEventListener("input", updateStyles);
-  document
-    .getElementById("fontWeight")
-    .addEventListener("change", updateStyles);
-  document
-    .getElementById("fontFamily")
-    .addEventListener("change", updateStyles);
-
-  document.getElementById("toggleSettings").addEventListener("click", () => {
-    const settingsMenu = document.getElementById("settingsMenu");
-    settingsMenu.classList.toggle("hidden");
-  });
-
-  // Load preferences when the page loads
   loadPreferences();
 
   document.addEventListener("keydown", handleKeyPress);
