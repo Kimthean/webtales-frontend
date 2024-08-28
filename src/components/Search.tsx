@@ -1,4 +1,3 @@
-import { h } from "preact";
 import { useEffect, useRef, useState, useMemo } from "preact/hooks";
 import Fuse from "fuse.js";
 import NovelCard from "./NovelCard";

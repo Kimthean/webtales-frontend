@@ -1,7 +1,5 @@
-import { h } from "preact";
 import { useEffect, useRef, useCallback } from "preact/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { route } from "preact-router";
 import LoadingSpinner from "./Loading";
 
 interface Chapter {

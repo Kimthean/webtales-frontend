@@ -1,4 +1,3 @@
-import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import Pagination from "./Pagination";
 import "@/styles/scrollbar.css";

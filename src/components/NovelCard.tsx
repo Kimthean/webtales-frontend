@@ -1,5 +1,3 @@
-import { h } from "preact";
-
 import type { Novel } from "./Search";
 
 interface NovelCardProps {
