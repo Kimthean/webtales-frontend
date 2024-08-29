@@ -1,5 +1,5 @@
 # Ignore everything
-/*
+# /*
 
 # Except these files & folders
 !/src
@@ -11,3 +11,4 @@
 !.prettierrc
 !.eslintrc.js
 !README.md
+!auth.cnfig.mjs

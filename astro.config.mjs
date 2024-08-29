@@ -5,13 +5,14 @@ import icon from "astro-icon";
 import sitemap from '@astrojs/sitemap';
 import preact from '@astrojs/preact';
 
+import auth from "auth-astro";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://webtalesmtl.xyz",
   integrations: [tailwind(), icon(), sitemap(), preact({
     compat: true
-  })],
+  }), auth()],
   output: "server",
   adapter: vercelServerless(),
   vite: {

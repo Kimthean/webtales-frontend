@@ -1,0 +1,141 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import { API_URL } from "@/constants/index";
+
+let errorMessage = "";
+
+if (Astro.request.method === "POST") {
+  try {
+    const data = await Astro.request.formData();
+    const username = data.get("username");
+    const email = data.get("email");
+    const password = data.get("password");
+    const confirmPassword = data.get("confirmPassword");
+
+    if (password !== confirmPassword) {
+      errorMessage = "Passwords do not match.";
+    } else {
+      const res = await fetch(`${API_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const json = await res.json();
+      if (json.message === "Register success") {
+        return Astro.redirect("/auth/sign-in");
+      } else {
+        errorMessage = json.message;
+      }
+    }
+  } catch (error) {
+    errorMessage = "An unexpected error occurred. Please try again.";
+  }
+}
+---
+
+<Layout title="Sign Up">
+  <Header />
+  <div class="lg:px-8 flex flex-grow items-center justify-center px-4 sm:px-6">
+    <div class="w-full max-w-md space-y-8">
+      <div class="rounded-lg bg-white px-4 py-8 shadow sm:px-10">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create your account
+        </h2>
+        <form method="POST" class="mt-8 space-y-6">
+          <div class="-space-y-px rounded-md shadow-sm">
+            <div>
+              <label for="username" class="sr-only">Username</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Username"
+              />
+            </div>
+            <div>
+              <label for="email" class="sr-only">Email address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                class="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Email address"
+              />
+            </div>
+            <div>
+              <label for="password" class="sr-only">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                required
+                minlength="6"
+                class="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Password"
+              />
+            </div>
+            <div>
+              <label for="confirmPassword" class="sr-only"
+                >Confirm Password</label
+              >
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autocomplete="new-password"
+                required
+                minlength="6"
+                class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Confirm Password"
+              />
+            </div>
+          </div>
+
+          {
+            errorMessage && (
+              <div class="mt-2 text-sm text-red-500">{errorMessage}</div>
+            )
+          }
+
+          <div>
+            <button
+              type="submit"
+              class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Sign up
+            </button>
+          </div>
+        </form>
+        <div class="mt-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="bg-white px-2 text-gray-500">
+                Already have an account?
+              </span>
+            </div>
+          </div>
+          <div class="mt-6 text-center">
+            <a
+              href="/auth/sign-in"
+              class="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Sign in
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

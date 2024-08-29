@@ -1,0 +1,13 @@
+---
+import { getSession } from "auth-astro/server";
+
+const session = await getSession(Astro.request);
+---
+
+<div>
+  <h1>Welcome to your dashboard, {JSON.stringify(session?.user)}!</h1>
+  <p>
+    This is a protected route. You can only see this content if you're signed
+    in.
+  </p>
+</div>
