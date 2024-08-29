@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
+import { Icon } from "astro-icon/components";
 ---
 
 <Layout title="Login">
@@ -38,9 +39,10 @@ import Header from "@/components/Header.astro";
               />
             </div>
           </div>
+          <div id="error-message" class="text-sm text-red-500"></div>
 
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
+          <div class="items-center">
+            <!-- <div class="flex items-center">
               <input
                 id="remember-me"
                 name="remember-me"
@@ -50,7 +52,7 @@ import Header from "@/components/Header.astro";
               <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                 Remember me
               </label>
-            </div>
+            </div> -->
 
             <div class="text-sm">
               <a
@@ -66,13 +68,23 @@ import Header from "@/components/Header.astro";
             <button
               type="submit"
               id="login-button"
-              class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Sign in
             </button>
           </div>
-          <div id="error-message" class="mt-2 text-sm text-red-500"></div>
         </form>
+        <div class="pt-4">
+          <button
+            type="button"
+            id="google-button"
+            class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            <Icon name="google" class="mr-2 h-5 w-5" />
+            Google
+          </button>
+        </div>
+
         <div class="mt-6">
           <div class="relative">
             <div class="absolute inset-0 flex items-center">
@@ -125,5 +137,9 @@ import Header from "@/components/Header.astro";
           window.location.href = "/";
         }
       });
+    const googleButton = document.getElementById("google-button");
+    googleButton?.addEventListener("click", async () => {
+      const result = await signIn("google", { redirect: true });
+    });
   </script>
 </Layout>
