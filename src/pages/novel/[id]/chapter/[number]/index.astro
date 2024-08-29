@@ -89,7 +89,7 @@ const isInfiniteScrollEnabled =
           />
         ) : (
           <div>
-            <h1 class="mb-6 text-xl font-bold sm:text-3xl">
+            <h1 class="title mb-6 text-xl font-bold sm:text-3xl">
               {chapter.translated_title}
             </h1>
             <div class="my-8 flex items-center justify-between">
@@ -202,7 +202,7 @@ const isInfiniteScrollEnabled =
     const fontSize = getCookie("readerFontSize") || "16";
     const fontWeight = getCookie("readerFontWeight") || "400";
     const fontFamily =
-      getCookie("readerFontFamily") || "'IBM Plex Mono', monospace";
+      getCookie("readerFontFamily") || "'San Serif', sans-serif";
 
     document.documentElement.style.setProperty("--font-size", `${fontSize}px`);
     document.documentElement.style.setProperty("--font-weight", fontWeight);
@@ -221,12 +221,16 @@ const isInfiniteScrollEnabled =
 <style is:global>
   :root {
     --font-size: 16px;
-    --font-family: "IBM Plex Mono", monospace;
+    --font-family: "San Serif", sans-serif;
   }
 
   .chapter-content {
     font-size: var(--font-size);
     font-weight: var(--font-weight);
+    font-family: var(--font-family);
+  }
+
+  .title {
     font-family: var(--font-family);
   }
 </style>

@@ -5,7 +5,7 @@ const SettingsPanel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [fontSize, setFontSize] = useState("16");
   const [fontWeight, setFontWeight] = useState("400");
-  const [fontFamily, setFontFamily] = useState("'IBM Plex Mono', monospace");
+  const [fontFamily, setFontFamily] = useState("'San Serif', sans-serif");
   const [isAutoFetchEnabled, setIsAutoFetchEnabled] = useState(false);
 
   useEffect(() => {
@@ -129,11 +129,13 @@ const SettingsPanel = () => {
             <select
               id="fontFamily"
               value={fontFamily}
+              defaultValue="'San Serif', sans-serif"
               onChange={e =>
                 handleSettingChange("fontFamily", e.currentTarget.value)
               }
               className="w-1/2 rounded border border-skin-line bg-skin-fill p-1 text-xs"
             >
+              <option value="'San Serif', sans-serif">San Serif</option>
               <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
               <option value="'Roboto', sans-serif">Roboto</option>
               <option value="'Open Sans', sans-serif">Open Sans</option>
