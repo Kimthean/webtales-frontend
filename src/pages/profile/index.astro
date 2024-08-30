@@ -7,19 +7,78 @@ import { getSession } from "auth-astro/server";
 
 const session = await getSession(Astro.request);
 
-const userResponse = await axiosInstance.get("/user/me", {
-  headers: {
-    Authorization: `Bearer ${session?.user?.token}`,
-  },
-});
+if (!session) {
+  Astro.redirect("/auth/sign-in");
+}
+console.log(session);
+let user;
 
-const user = userResponse.data.user;
+try {
+  const userResponse = await axiosInstance.get("/user/me", {
+    headers: {
+      Authorization: `Bearer ${session?.user?.token}`,
+    },
+  });
+  user = userResponse.data.user;
+} catch (error) {
+  Astro.redirect("/auth/sign-in");
+}
+
+// async function handleFormSubmission(formData: FormData) {
+//   const formType = formData.get("formType");
+
+//   if (formType === "change-username") {
+//     const newUsername = formData.get("username");
+//     await axiosInstance.put(
+//       "/user/change-username",
+//       { username: newUsername },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${session?.user?.token}`,
+//         },
+//       }
+//     );
+//   } else if (formType === "change-password") {
+//     const currentPassword = formData.get("currentPassword");
+//     const newPassword = formData.get("newPassword");
+//     // Send the new password to your backend API
+//     await axiosInstance.post(
+//       "/api/user/change-password",
+//       { currentPassword, newPassword },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${session?.user?.token}`,
+//         },
+//       }
+//     );
+//   } else if (formType === "change-profile-picture") {
+//     const profileImage = formData.get("profileImage");
+//     // Send the new profile picture to your backend API
+//     const formDataToSend = new FormData();
+//     formDataToSend.append("profileImage", profileImage);
+//     await axiosInstance.post(
+//       "/api/user/change-profile-picture",
+//       formDataToSend,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${session?.user?.token}`,
+//           "Content-Type": "multipart/form-data",
+//         },
+//       }
+//     );
+//   }
+// }
+
+// if (Astro.request.method === "PUT") {
+//   const formData = await Astro.request.formData();
+//   await handleFormSubmission(formData);
+// }
 ---
 
 <Layout title="Profile">
   <Header />
   <Main />
-  <div class="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-md">
+  <div class="mx-auto max-w-3xl rounded-lg p-6">
     <div class="flex items-center space-x-4">
       <img
         src={user.profileImage}
@@ -37,5 +96,76 @@ const user = userResponse.data.user;
         Welcome to your profile page, {user.username}!
       </p>
     </div>
+
+    <!-- <div class="mt-6">
+      <h3 class="text-lg font-semibold text-gray-700">Change Username</h3>
+      <form method="PUT" class="mt-4">
+        <input type="hidden" name="formType" value="change-username" />
+        <input
+          type="text"
+          name="username"
+          placeholder="New Username"
+          class="w-full rounded-lg border border-gray-300 p-2"
+          required
+        />
+        <button
+          type="submit"
+          class="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Change Username
+        </button>
+      </form>
+    </div>
+
+
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold text-gray-700">Change Password</h3>
+      <form method="POST" class="mt-4">
+        <input type="hidden" name="formType" value="change-password" />
+        <input
+          type="password"
+          name="currentPassword"
+          placeholder="Current Password"
+          class="w-full rounded-lg border border-gray-300 p-2"
+          required
+        />
+        <input
+          type="password"
+          name="newPassword"
+          placeholder="New Password"
+          class="mt-2 w-full rounded-lg border border-gray-300 p-2"
+          required
+        />
+        <button
+          type="submit"
+          class="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Change Password
+        </button>
+      </form>
+    </div>
+
+
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold text-gray-700">
+        Change Profile Picture
+      </h3>
+      <form method="POST" enctype="multipart/form-data" class="mt-4">
+        <input type="hidden" name="formType" value="change-profile-picture" />
+        <input
+          type="file"
+          name="profileImage"
+          accept="image/*"
+          class="w-full rounded-lg border border-gray-300 p-2"
+          required
+        />
+        <button
+          type="submit"
+          class="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Change Profile Picture
+        </button>
+      </form>
+    </div> -->
   </div>
 </Layout>

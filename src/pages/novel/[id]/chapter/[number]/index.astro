@@ -29,7 +29,7 @@ const chapter = await getChapterData(id, number);
 const chapterStats = await getChapterStats(id);
 
 if (!chapter || !chapterStats) {
-  return Astro.redirect("/error");
+  return Astro.redirect("/404");
 }
 
 const currentChapter = parseInt(number as string);

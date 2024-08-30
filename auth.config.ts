@@ -26,6 +26,7 @@ export default defineConfig({
           name: profile.name,
           email: profile.email,
           image: profile.picture,
+          provider: "google",
         };
       },
     }),
@@ -58,6 +59,7 @@ export default defineConfig({
             email: userData.user.email,
             image: userData.user.profileImage,
             token: userData.token,
+            provider: userData.user.provider,
           } as User;
         } catch (err) {
           return null;
@@ -90,6 +92,7 @@ export default defineConfig({
           const data = await response.json();
           user.id = data.user.id;
           (user as any).token = data.token;
+          (user as User).provider = data.user.provider;
           return true;
         } catch (error) {
           console.error("Error during Google sign in:", error);
@@ -103,8 +106,9 @@ export default defineConfig({
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.role = (user as User).role;
-        token.token = (user as User).token;
+        token.role = user.role;
+        token.token = user.token;
+        token.provider = user.provider;
       }
       return token;
     },
@@ -115,6 +119,7 @@ export default defineConfig({
         session.user.email = token.email || "";
         (session.user as any).role = token.role;
         (session.user as any).token = token.token;
+        (session.user as any).provider = token.provider;
       }
       return session;
     },

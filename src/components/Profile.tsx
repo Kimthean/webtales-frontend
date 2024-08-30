@@ -1,13 +1,15 @@
 import type { Session } from "@auth/core/types";
 import { signOut } from "auth-astro/client";
-import { useState, useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 
 const Profile = ({ session }: { session: Session | null }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await signOut().then(() => {
+        window.location.href = "/";
+      });
     } catch (error) {
       console.error("Error during sign-out:", error);
     }
