@@ -5,16 +5,22 @@ const axiosInstance = axios.create({
   baseURL: API_URL,
 });
 
-export const getAuthenticatedApi = async () => {
-  const session = await fetch("/api/auth/session").then(res => res.json());
+const getSession = await fetch("http://localhost:4321/api/auth/session");
+const session = await getSession.json();
 
-  console.log("session", session);
-  if (session?.user?.token) {
-    axiosInstance.defaults.headers.common["Authorization"] =
-      `Bearer ${session.user.token}`;
+axiosInstance.interceptors.request.use(
+  config => {
+    if (typeof window !== "undefined") {
+      const token = session.user?.token;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
   }
-
-  return axiosInstance;
-};
+);
 
 export default axiosInstance;

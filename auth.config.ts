@@ -8,7 +8,7 @@ const GoogleClientID = import.meta.env.GOOGLE_CLIENT_ID;
 const GoogleClientSecret = import.meta.env.GOOGLE_CLIENT_SECRET;
 
 export default defineConfig({
-  // debug: true,
+  debug: true,
   providers: [
     Google({
       clientId: GoogleClientID,
@@ -103,8 +103,8 @@ export default defineConfig({
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.role = (user as any).role;
-        token.token = (user as any).token;
+        token.role = (user as User).role;
+        token.token = (user as User).token;
       }
       return token;
     },

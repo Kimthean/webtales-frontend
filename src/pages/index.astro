@@ -26,12 +26,16 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
     <DiscordAd />
     <div class="flex flex-col py-4">
       <div class="flex items-center pb-4">
-        <h2 class="text-lg font-bold sm:text-xl">Latest Added Novel</h2>
+        <h2 class="text-md font-bold sm:text-xl">Latest Added Novel</h2>
         <LinkButton href="/library" className="ml-auto flex items-center">
-          Browser Library <svg
+          <span class="text-center text-sm text-skin-accent sm:text-base">
+            View All
+          </span>
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
+            class="text-center"
           >
             <path
               d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
@@ -50,12 +54,17 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
 
     <div class="flex flex-col py-4">
       <div class="flex items-center pb-4">
-        <h2 class="text-lg font-bold sm:text-xl">Latest Updated Novel</h2>
-        <LinkButton href="/library" className="ml-auto flex items-center">
-          Browser Library <svg
+        <h2 class="text-md font-bold sm:text-xl">Latest Updated Novel</h2>
+        <LinkButton
+          href="/library"
+          className="ml-auto flex items-center text-skin-accent"
+        >
+          <span class="text-center text-sm sm:text-base"> View All </span>
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
+            class="ml-1 h-5 w-5 text-skin-accent"
           >
             <path
               d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
