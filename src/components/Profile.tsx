@@ -25,18 +25,18 @@ const Profile = ({ session }: { session: Session | null }) => {
       className={`absolute right-0 top-full mt-2 w-44 rounded-lg border bg-white shadow-md ${isDropdownVisible ? "flex" : "hidden"}`}
     >
       <ul class="w-full py-2">
-        <li class="px-4 py-2 hover:bg-gray-100">
+        {/* <li class="px-4 py-2 hover:bg-gray-100">
           <a
             href="/profile"
             class="block min-w-full text-sm font-medium text-gray-700 hover:text-gray-900"
           >
             Profile
           </a>
-        </li>
-        <li class="px-4 py-2 hover:bg-gray-100">
+        </li> */}
+        <li class="hover:bg-gray-100">
           <button
             onClick={handleSignOut}
-            class="block text-sm font-medium text-red-600 hover:text-red-700"
+            class="block w-full py-2 text-sm font-medium text-red-600 hover:text-red-700"
           >
             Sign out
           </button>
