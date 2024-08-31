@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getSession } from "auth-astro/server";
 
+
 export const GET: APIRoute = async ({ request }) => {
   try {
     const session = await getSession(request);
@@ -8,9 +9,6 @@ export const GET: APIRoute = async ({ request }) => {
     if (!session) {
       return new Response(JSON.stringify({ error: "No session found" }), {
         status: 401,
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
     }
 

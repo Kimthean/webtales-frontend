@@ -22,7 +22,7 @@ const Profile = ({ session }: { session: Session | null }) => {
   const profileContent = session ? (
     <div
       id="profile-dropdown"
-      className={`absolute right-0 top-full mt-2 w-44 rounded-lg border bg-white shadow-md ${isDropdownVisible ? "flex" : "hidden"}`}
+      className={`absolute right-0 top-full mt-2 w-36 rounded-lg border bg-white shadow-md ${isDropdownVisible ? "flex" : "hidden"}`}
     >
       <ul class="w-full py-2">
         {/* <li class="px-4 py-2 hover:bg-gray-100">
@@ -33,6 +33,14 @@ const Profile = ({ session }: { session: Session | null }) => {
             Profile
           </a>
         </li> */}
+        <li class="text-center hover:bg-gray-100">
+          <a
+            href="/bookmarks"
+            class="block w-full py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            Bookmarks
+          </a>
+        </li>
         <li class="hover:bg-gray-100">
           <button
             onClick={handleSignOut}

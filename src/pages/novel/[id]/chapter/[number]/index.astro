@@ -2,9 +2,11 @@
 import ChapterLayout from "@/layouts/ChapterLayout.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { API_URL } from "@/constants/index";
-import { InfiniteScrollChapter } from "@/components/InfiniteScrollChapter";
+import { InfiniteScrollChapter } from "@/components/preact/InfiniteScrollChapter";
+import { getSession } from "auth-astro/server";
 
 const { id, number } = Astro.params;
+const session = await getSession(Astro.request);
 
 const getChapterData = async (
   id: string | undefined,
@@ -25,8 +27,24 @@ const getChapterStats = async (id: string | undefined) => {
   return await res.json();
 };
 
+const updateUserProgress = async (
+  id: string | undefined,
+  chapterNumber: string | undefined
+) => {
+  const res = await fetch(`${API_URL}/user/progress/${id}/${chapterNumber}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${session?.user?.token}`,
+    },
+  });
+  return res.ok;
+};
+
 const chapter = await getChapterData(id, number);
 const chapterStats = await getChapterStats(id);
+if (session && chapter) {
+  await updateUserProgress(id, number);
+}
 
 if (!chapter || !chapterStats) {
   return Astro.redirect("/404");

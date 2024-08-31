@@ -2,13 +2,19 @@
 import Header from "@/components/Header.astro";
 import Layout from "@/layouts/Layout.astro";
 import { API_URL } from "@/constants/index";
-import ChapterSection from "@/components/ChapterList";
+import ChapterSection from "@/components/preact/ChapterList";
 import { Image } from "astro:assets";
+import { getSession } from "auth-astro/server";
+import axiosInstance from "@/lib/axios";
+import BookmarkButton from "@/components/preact/BookmarkButton";
+import formatRelativeTime from "@/lib/formatRelativeTime";
 
 const { id } = Astro.params;
 
 const initialPage = parseInt(Astro.url.searchParams.get("page") || "1");
 const pageSize = 100;
+
+const session = await getSession(Astro.request);
 
 const getNovelData = async (id: string | undefined) => {
   const res = await fetch(`${API_URL}/novel/${id}`);
@@ -18,18 +24,59 @@ const getNovelData = async (id: string | undefined) => {
   return await res.json();
 };
 
-const novel = await getNovelData(id);
+const getBookmarkStatus = async (id: string | undefined) => {
+  if (!session) {
+    return null;
+  }
 
+  try {
+    const res = await axiosInstance.get(`/user/bookmark/${id}`, {
+      headers: {
+        Authorization: `Bearer ${session.user?.token}`,
+      },
+    });
+    return await res.data.bookmarked;
+  } catch (error) {
+    return error;
+  }
+};
+const bookmarkStatus = await getBookmarkStatus(id);
+const novel = await getNovelData(id);
 if (!novel) {
   return Astro.redirect("/404");
 }
 
 const novel_description = novel.description
-  .split("\n\n")
+  .split("\n")
   .filter((p: string) => p.trim() !== "");
 
 const title = `${novel.title.replace(/\b\w/g, (char: string) => char.toUpperCase())} | Webtales`;
 const description = novel_description.slice(0, 160);
+
+const getUserProgress = async (id: string | undefined) => {
+  if (!session) {
+    return null;
+  }
+
+  try {
+    const res = await axiosInstance.get(`/user/progress/${id}`, {
+      headers: {
+        Authorization: `Bearer ${session.user?.token}`,
+      },
+    });
+    return await res.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+const progress = await getUserProgress(id);
+const lastReadChapter = progress ? progress.chapter_id : null;
+const lastRead = progress ? progress.last_read_at : null;
+const firstChapterUrl = `/novel/${id}/chapter/1`;
+const lastReadChapterUrl = lastReadChapter
+  ? `/novel/${id}/chapter/${lastReadChapter}`
+  : firstChapterUrl;
 ---
 
 <Layout title={title} description={description} image={novel.thumbnail}>
@@ -70,6 +117,27 @@ const description = novel_description.slice(0, 160);
               .join(" ")
           }
         </p>
+        <div class="flex gap-2 sm:gap-4">
+          <a
+            href={lastReadChapter ? lastReadChapterUrl : firstChapterUrl}
+            class="hover:bg-skin-accent-hover rounded-md bg-skin-accent px-4 py-2 text-center text-xs text-skin-inverted transition sm:px-5 sm:py-2 sm:text-sm"
+          >
+            {lastReadChapter ? "Continue Reading" : "Start Reading"}
+          </a>
+          <BookmarkButton
+            novelId={novel.id}
+            client:only="preact"
+            status={bookmarkStatus}
+          />
+        </div>
+        <span class="mb-4 mt-2 block text-sm text-skin-base opacity-80">
+          {
+            lastRead
+              ? `Last Read: ${formatRelativeTime(lastRead)}`
+              : "Last Read: Never"
+          }</span
+        >
+
         <div class="rounded-lg bg-skin-card p-4 shadow-md sm:p-6">
           <h2 class="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
             Description
@@ -83,9 +151,17 @@ const description = novel_description.slice(0, 160);
               class="overflow-x-hidden text-pretty leading-relaxed"
             >
               {
-                novel_description
-                  .slice(0, 3)
-                  .map((paragraph: string) => <p>{paragraph}</p>)
+                novel_description.length === 1 ? (
+                  <p>
+                    {novel_description[0].length > 150
+                      ? novel_description[0].substring(0, 150) + "..."
+                      : novel_description[0]}
+                  </p>
+                ) : (
+                  novel_description
+                    .slice(0, 3)
+                    .map((paragraph: string) => <p>{paragraph}</p>)
+                )
               }
             </div>
             <div
@@ -101,7 +177,7 @@ const description = novel_description.slice(0, 160);
               Read more
             </button>
             {
-              novel.epub_url === "" ? (
+              novel.epub_url === null ? (
                 <button
                   id="generateEpubButton"
                   data-id={id}

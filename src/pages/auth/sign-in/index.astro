@@ -139,7 +139,7 @@ import { Icon } from "astro-icon/components";
       });
     const googleButton = document.getElementById("google-button");
     googleButton?.addEventListener("click", async () => {
-      const result = await signIn("google", { redirect: true });
+      await signIn("google", { redirect: true });
     });
   </script>
 </Layout>

@@ -1,11 +1,11 @@
 import axios from "axios";
-import { API_URL } from "../constants";
+import { API_URL, BASE_URL } from "../constants";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
 });
 
-const getSession = await fetch("http://localhost:4321/api/auth/session");
+const getSession = await fetch(`${BASE_URL}/api/auth/session`);
 const session = await getSession.json();
 
 axiosInstance.interceptors.request.use(
