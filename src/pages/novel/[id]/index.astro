@@ -126,8 +126,8 @@ const lastReadChapterUrl = lastReadChapter
           </a>
           <BookmarkButton
             novelId={novel.id}
-            client:only="preact"
             status={bookmarkStatus}
+            client:load
           />
         </div>
         <span class="mb-4 mt-2 block text-sm text-skin-base opacity-80">
