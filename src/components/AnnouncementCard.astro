@@ -33,9 +33,7 @@ const { announcement } = Astro.props as AnnouncementCardProps;
       <p class="mb-4 text-sm">{announcement.description}</p>
       <div class="flex items-center justify-between">
         <span class="text-xs text-gray-500"
-          >Posted on {
-            new Date(announcement.createdAt).toLocaleDateString()
-          }</span
+          >Posted on {new Date(announcement.createdAt).toDateString()}</span
         >
       </div>
     </div>
