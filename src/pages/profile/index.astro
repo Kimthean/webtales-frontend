@@ -8,164 +8,188 @@ import { getSession } from "auth-astro/server";
 const session = await getSession(Astro.request);
 
 if (!session) {
-  Astro.redirect("/auth/sign-in");
+  return Astro.redirect("/auth/sign-in");
 }
-console.log(session);
+
 let user;
+let message = "";
 
 try {
   const userResponse = await axiosInstance.get("/user/me", {
     headers: {
-      Authorization: `Bearer ${session?.user?.token}`,
+      Authorization: `Bearer ${session?.user?.access_token}`,
     },
   });
   user = userResponse.data.user;
 } catch (error) {
-  Astro.redirect("/auth/sign-in");
+  return Astro.redirect("/auth/sign-in");
 }
 
-// async function handleFormSubmission(formData: FormData) {
-//   const formType = formData.get("formType");
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const action = formData.get("action");
 
-//   if (formType === "change-username") {
-//     const newUsername = formData.get("username");
-//     await axiosInstance.put(
-//       "/user/change-username",
-//       { username: newUsername },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${session?.user?.token}`,
-//         },
-//       }
-//     );
-//   } else if (formType === "change-password") {
-//     const currentPassword = formData.get("currentPassword");
-//     const newPassword = formData.get("newPassword");
-//     // Send the new password to your backend API
-//     await axiosInstance.post(
-//       "/api/user/change-password",
-//       { currentPassword, newPassword },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${session?.user?.token}`,
-//         },
-//       }
-//     );
-//   } else if (formType === "change-profile-picture") {
-//     const profileImage = formData.get("profileImage");
-//     // Send the new profile picture to your backend API
-//     const formDataToSend = new FormData();
-//     formDataToSend.append("profileImage", profileImage);
-//     await axiosInstance.post(
-//       "/api/user/change-profile-picture",
-//       formDataToSend,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${session?.user?.token}`,
-//           "Content-Type": "multipart/form-data",
-//         },
-//       }
-//     );
-//   }
-// }
+  try {
+    if (action === "updateProfilePicture") {
+      const file = formData.get("file") as File;
+      const imageFormData = new FormData();
+      imageFormData.append("file", file);
 
-// if (Astro.request.method === "PUT") {
-//   const formData = await Astro.request.formData();
-//   await handleFormSubmission(formData);
-// }
+      await axiosInstance.post("/user/profile-picture", imageFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${session.user?.access_token}`,
+        },
+      });
+      message = "Profile picture updated successfully!";
+    } else if (action === "updateUsername") {
+      const username = formData.get("username") as string;
+      await axiosInstance.put(
+        "/user/profile",
+        { username },
+        {
+          headers: {
+            Authorization: `Bearer ${session.user?.access_token}`,
+          },
+        }
+      );
+      message = "Username updated successfully!";
+      user.username = username;
+    } else if (action === "changePassword") {
+      const currentPassword = formData.get("currentPassword") as string;
+      const newPassword = formData.get("newPassword") as string;
+      await axiosInstance.post(
+        "/user/change-password",
+        {
+          current_password: currentPassword,
+          new_password: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.user?.access_token}`,
+          },
+        }
+      );
+      message = "Password changed successfully!";
+    }
+  } catch (error) {
+    message = "An error occurred. Please try again.";
+  }
+}
 ---
 
 <Layout title="Profile">
   <Header />
-  <Main />
-  <div class="mx-auto max-w-3xl rounded-lg p-6">
-    <div class="flex items-center space-x-4">
-      <img
-        src={user.profileImage}
-        alt="Profile Image"
-        class="h-24 w-24 rounded-full shadow-lg"
-      />
-      <div>
-        <h1 class="text-3xl font-bold text-gray-800">{user.username}</h1>
-        <p class="text-sm text-gray-500">Email: {user.email}</p>
+  <Main>
+    <div class="mx-auto max-w-4xl rounded-lg bg-gray-50 p-8 shadow-lg">
+      {
+        message && (
+          <div class="mb-6 rounded-md bg-green-100 p-4 text-green-700">
+            <p class="text-sm font-medium">{message}</p>
+          </div>
+        )
+      }
+      <div class="md:grid-cols-3 grid gap-8">
+        <div class="text-center">
+          <img
+            src={user.profileImage}
+            alt="Profile Image"
+            class="mx-auto h-40 w-40 rounded-full object-cover shadow-lg"
+          />
+          <h2 class="mb-4 text-xl font-semibold text-gray-900">
+            Account Overview
+          </h2>
+          <p class="mb-6 text-gray-700">
+            Welcome to your profile page, {user.username}!
+          </p>
+          <h1 class="mb-2 text-3xl font-bold text-gray-900">{user.username}</h1>
+          <p class="mb-6 text-sm text-gray-600">{user.email}</p>
+        </div>
+        <form method="POST" enctype="multipart/form-data" class="mt-4">
+          <input type="hidden" name="action" value="updateProfilePicture" />
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            required
+            class="mb-2 w-full cursor-pointer rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none"
+          />
+          <button
+            type="submit"
+            class="w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
+          >
+            Upload New Picture
+          </button>
+        </form>
+        <div class="md:col-span-2">
+          <form method="POST" class="mb-8">
+            <input type="hidden" name="action" value="updateUsername" />
+            <div class="mb-4">
+              <label
+                for="username"
+                class="block text-sm font-medium text-gray-700">Username</label
+              >
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={user.username}
+                required
+                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              />
+            </div>
+            <button
+              type="submit"
+              class="rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white"
+            >
+              Update Username
+            </button>
+          </form>
+
+          <h2 class="mb-4 text-xl font-semibold text-gray-900">
+            Change Password
+          </h2>
+          <form method="POST" class="space-y-4">
+            <input type="hidden" name="action" value="changePassword" />
+            <div>
+              <label
+                for="currentPassword"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Current Password
+              </label>
+              <input
+                type="password"
+                id="currentPassword"
+                name="currentPassword"
+                required
+                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label
+                for="newPassword"
+                class="block text-sm font-medium text-gray-700"
+              >
+                New Password
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                name="newPassword"
+                required
+                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+              />
+            </div>
+            <button
+              type="submit"
+              class="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            >
+              Change Password
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-    <div class="mt-6">
-      <h2 class="text-xl font-semibold text-gray-700">Account Overview</h2>
-      <p class="text-gray-600">
-        Welcome to your profile page, {user.username}!
-      </p>
-    </div>
-
-    <!-- <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-700">Change Username</h3>
-      <form method="PUT" class="mt-4">
-        <input type="hidden" name="formType" value="change-username" />
-        <input
-          type="text"
-          name="username"
-          placeholder="New Username"
-          class="w-full rounded-lg border border-gray-300 p-2"
-          required
-        />
-        <button
-          type="submit"
-          class="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Change Username
-        </button>
-      </form>
-    </div>
-
-
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-700">Change Password</h3>
-      <form method="POST" class="mt-4">
-        <input type="hidden" name="formType" value="change-password" />
-        <input
-          type="password"
-          name="currentPassword"
-          placeholder="Current Password"
-          class="w-full rounded-lg border border-gray-300 p-2"
-          required
-        />
-        <input
-          type="password"
-          name="newPassword"
-          placeholder="New Password"
-          class="mt-2 w-full rounded-lg border border-gray-300 p-2"
-          required
-        />
-        <button
-          type="submit"
-          class="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Change Password
-        </button>
-      </form>
-    </div>
-
-
-    <div class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-700">
-        Change Profile Picture
-      </h3>
-      <form method="POST" enctype="multipart/form-data" class="mt-4">
-        <input type="hidden" name="formType" value="change-profile-picture" />
-        <input
-          type="file"
-          name="profileImage"
-          accept="image/*"
-          class="w-full rounded-lg border border-gray-300 p-2"
-          required
-        />
-        <button
-          type="submit"
-          class="mt-4 inline-block rounded-lg bg-blue-500 px-6 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Change Profile Picture
-        </button>
-      </form>
-    </div> -->
-  </div>
+  </Main>
 </Layout>

@@ -3,30 +3,19 @@ import tailwind from "@astrojs/tailwind";
 import vercelServerless from "@astrojs/vercel/serverless";
 import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
-import preact from "@astrojs/preact";
-
 import auth from "auth-astro";
+
+import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://webtalesmtl.xyz",
-  integrations: [
-    tailwind(),
-    icon(),
-    sitemap(),
-    preact({
-      compat: true,
-    }),
-    auth(),
-  ],
+  integrations: [tailwind(), icon(), sitemap(), auth(), react()],
   output: "server",
   adapter: vercelServerless(),
   vite: {
     ssr: {
       external: ["@11ty/eleventy-img", "svgo"],
-    },
-    server: {
-      hmr: false,
     },
   },
   trailingSlash: "never",

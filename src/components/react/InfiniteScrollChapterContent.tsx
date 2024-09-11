@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "preact/hooks";
+import { useEffect, useRef, useCallback } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./Loading";
 
@@ -6,23 +6,23 @@ interface Chapter {
   id: number;
   translated_title: string;
   translated_content: string;
-  chapter_number: number;
+  slug: string;
 }
 
 interface InfiniteScrollChapterProps {
-  novelId: string;
+  novelSlug: string;
   initialChapter: Chapter;
-  initialChapterNumber: string;
+  initialChapterSlug: string;
 }
 
 const fetchChapter = async ({
   pageParam,
-  novelId,
+  novelSlug,
 }: {
-  pageParam: number;
-  novelId: string;
+  pageParam: string;
+  novelSlug: string;
 }) => {
-  const response = await fetch(`/api/novel/${novelId}/chapter/${pageParam}`);
+  const response = await fetch(`/api/novel/${novelSlug}/chapter/${pageParam}`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -31,7 +31,7 @@ const fetchChapter = async ({
 
 const InfiniteScrollChapterContent: preact.FunctionComponent<
   InfiniteScrollChapterProps
-> = ({ novelId, initialChapterNumber }) => {
+> = ({ novelSlug, initialChapterSlug }) => {
   const observerTarget = useRef<HTMLDivElement>(null);
 
   const {
@@ -43,16 +43,16 @@ const InfiniteScrollChapterContent: preact.FunctionComponent<
     isError,
     error,
   } = useInfiniteQuery({
-    queryKey: ["chapters", novelId],
-    queryFn: ({ pageParam }) => fetchChapter({ pageParam, novelId }),
-    initialPageParam: parseInt(initialChapterNumber),
+    queryKey: ["chapters", novelSlug],
+    queryFn: ({ pageParam }) => fetchChapter({ pageParam, novelSlug }),
+    initialPageParam: initialChapterSlug,
     getNextPageParam: lastPage => {
-      const nextChapterNumber = lastPage.nextChapter;
-      if (nextChapterNumber) {
-        const newUrl = `/novel/${novelId}/chapter/${nextChapterNumber - 1}`;
+      const nextChapterSlug = lastPage.nextChapter;
+      if (nextChapterSlug) {
+        const newUrl = `/novel/${novelSlug}/chapter/${nextChapterSlug}`;
         history.replaceState({}, "", newUrl);
       }
-      return nextChapterNumber;
+      return nextChapterSlug;
     },
   });
 
@@ -91,7 +91,7 @@ const InfiniteScrollChapterContent: preact.FunctionComponent<
         <div
           key={i}
           className="chapter-content mb-8 space-y-4"
-          data-chapter-number={chapter.chapter_number}
+          data-chapter-slug={chapter.slug}
         >
           <h2 className="text-2xl font-bold">{chapter.translated_title}</h2>
           {chapter.translated_content

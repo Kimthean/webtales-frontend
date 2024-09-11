@@ -6,6 +6,7 @@ import Main from "@/layouts/Main.astro";
 import { API_URL } from "@/constants/index";
 import DiscordAd from "@/components/DiscordAd.astro";
 import LinkButton from "@/components/LinkButton.astro";
+import AnnouncementAd from "@/components/AnnouncementAd.astro";
 
 async function fetchLatestNovels() {
   const latestAddedResponse = await fetch(`${API_URL}/novel/latest`);
@@ -23,7 +24,11 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
 <Layout>
   <Header activeNav="home" />
   <Main>
-    <DiscordAd />
+    <AnnouncementAd
+      title="New Features and Improvements!"
+      description="We've added bookmarks, reading history, redesigned our mobile navigation, and more! Check out our announcements page for all the details."
+      link="/announcements"
+    />
     <div class="flex flex-col py-4">
       <div class="flex items-center pb-4">
         <h2 class="text-md font-bold sm:text-xl">Latest Added Novel</h2>

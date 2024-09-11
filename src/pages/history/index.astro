@@ -1,0 +1,102 @@
+---
+import Header from "@/components/Header.astro";
+import { API_URL } from "@/constants/index";
+import Layout from "@/layouts/Layout.astro";
+import { getSession } from "auth-astro/server";
+import Pagination from "@/components/Pagination.astro";
+import HistoryCard from "@/components/HistoryCard.astro";
+import type { Novel } from "@/types/novel";
+
+const session = await getSession(Astro.request);
+const currentPage = parseInt(Astro.url.searchParams.get("page") || "1");
+const limit = 10;
+
+async function getUserHistory(page: number, limit: number) {
+  if (!session) return null;
+
+  try {
+    const res = await fetch(
+      `${API_URL}/user/history?page=${page}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${session.user?.access_token}`,
+        },
+      }
+    );
+    if (!res.ok) throw new Error("Failed to fetch history");
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching user history:", error);
+    return null;
+  }
+}
+
+const histories = session ? await getUserHistory(currentPage, limit) : null;
+
+const totalPages = histories?.total_pages || 0;
+const prevUrl = currentPage > 1 ? `?page=${currentPage - 1}` : "";
+const nextUrl = currentPage < totalPages ? `?page=${currentPage + 1}` : "";
+---
+
+<Layout title="Reading History">
+  <Header />
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="mb-6 text-3xl font-bold">Reading History</h1>
+    {
+      !session && (
+        <div
+          class="mb-6 border-l-4 border-yellow-500 bg-yellow-100 p-4 text-yellow-700"
+          role="alert"
+        >
+          <p class="font-bold">
+            You need to be logged in to view your reading history.
+          </p>
+          <p>
+            Please
+            <a href="/auth/sign-in" class="underline">
+              sign in
+            </a>
+            to access this feature.
+          </p>
+        </div>
+      )
+    }
+    {
+      session && !histories && (
+        <div
+          class="border-l-4 border-red-500 bg-red-100 p-4 text-red-700"
+          role="alert"
+        >
+          <p class="font-bold">Error</p>
+          <p>Failed to load reading history. Please try again later.</p>
+        </div>
+      )
+    }
+    {
+      session && histories && histories.reading_history == null && (
+        <div class="pt-10 text-center text-lg">
+          You haven't read any novels yet.
+        </div>
+      )
+    }
+    {
+      session && histories && histories.reading_history != null && (
+        <div class="mb-4 space-y-6">
+          {histories.reading_history.map((history: Novel) => (
+            <HistoryCard novel={history} />
+          ))}
+        </div>
+      )
+    }
+    {
+      session && histories && totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          prevUrl={prevUrl}
+          nextUrl={nextUrl}
+        />
+      )
+    }
+  </main>
+</Layout>

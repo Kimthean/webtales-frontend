@@ -1,22 +1,27 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "react";
 import Pagination from "./Pagination";
 import "@/styles/scrollbar.css";
-import formatRelativeTime from "@/lib/formatRelativeTime";
+import formatRelativeTime from "@/lib/format-time";
 import LoadingSpinner from "./Loading";
 
 interface Chapter {
   translated_title: string;
-  Number: string;
-  UpdatedAt: string;
+  slug: string;
+  number: string;
+  updated_at: string;
 }
 
 interface ChapterListProps {
-  id: string | undefined;
+  novelSlug: string | undefined;
   initialPage: number;
   pageSize: number;
 }
 
-const ChapterList = ({ id, initialPage, pageSize }: ChapterListProps) => {
+const ChapterList = ({
+  novelSlug,
+  initialPage,
+  pageSize,
+}: ChapterListProps) => {
   const [page, setPage] = useState(initialPage);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -25,14 +30,14 @@ const ChapterList = ({ id, initialPage, pageSize }: ChapterListProps) => {
 
   useEffect(() => {
     fetchChapters();
-  }, [page, id, pageSize]);
+  }, [page, novelSlug, pageSize]);
 
   const fetchChapters = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const res = await fetch(
-        `/api/chapter?id=${id}&page=${page}&pageSize=${pageSize}`
+        `/api/chapter?novelSlug=${novelSlug}&page=${page}&pageSize=${pageSize}`
       );
       if (res.ok) {
         const data = await res.json();
@@ -70,21 +75,21 @@ const ChapterList = ({ id, initialPage, pageSize }: ChapterListProps) => {
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
             {chapters.map((chapter: Chapter) => (
               <li
-                key={chapter.Number}
+                key={chapter.number}
                 className="flex h-full w-full flex-col justify-between"
               >
                 <a
-                  href={`/novel/${id}/chapter/${chapter.Number}`}
+                  href={`/novel/${novelSlug}/chapter/${chapter.slug}`}
                   className="flex flex-grow flex-col rounded-md p-3 transition duration-150 ease-in-out hover:bg-skin-accent"
                 >
-                  <span className="text-sm font-medium text-skin-base sm:text-sm">
+                  <span className="text-xs font-medium text-skin-base sm:text-sm">
                     {chapter.translated_title}
                   </span>
                   <span className="mt-1 text-xs text-skin-base opacity-70">
-                    Updated: {formatRelativeTime(chapter.UpdatedAt)}
+                    Updated: {formatRelativeTime(chapter.updated_at)}
                   </span>
                 </a>
                 <hr className="mt-2 border-skin-line" />

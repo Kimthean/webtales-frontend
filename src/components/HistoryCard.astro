@@ -1,9 +1,8 @@
 ---
-import formatRelativeTime from "@/lib/format-time";
 import { Image } from "astro:assets";
+import formatRelativeTime from "@/lib/format-time";
 
-const novel = Astro.props.novel;
-const isLatestUpdate = Astro.props.isLatestUpdate;
+const { novel } = Astro.props;
 
 const formatTitle = (title: string) => {
   return title.replace(/\b\w/g, (char: string) => char.toUpperCase());
@@ -18,10 +17,11 @@ const formatAuthor = (author: string) => {
         .join(" ")
     : "Unknown";
 };
+
+const lastReadDate = new Date(novel.last_read_at);
 ---
 
-<a
-  href={`/novel/${novel.slug}`}
+<div
   class="relative block overflow-hidden rounded-xl bg-skin-card bg-opacity-60 shadow-lg"
 >
   <div class="flex flex-col sm:flex-row">
@@ -37,9 +37,12 @@ const formatAuthor = (author: string) => {
     }
     <div class="flex flex-grow flex-col justify-between p-4">
       <div class="flex-grow">
-        <h2 class="text-sm font-bold text-skin-base sm:mb-2 sm:text-xl">
+        <a
+          href={`/novel/${novel.slug}`}
+          class="text-sm font-bold text-skin-base sm:mb-2 sm:text-xl"
+        >
           {formatTitle(novel.title)}
-        </h2>
+        </a>
         <p
           class="mb-1 text-xs italic text-skin-base opacity-70 sm:mb-4 sm:text-sm"
         >
@@ -47,40 +50,33 @@ const formatAuthor = (author: string) => {
         </p>
         <div class="relative">
           <p
-            class="line-clamp-3 text-xs text-skin-base sm:line-clamp-4 sm:text-sm"
+            class="line-clamp-1 text-xs text-skin-base sm:line-clamp-1 sm:text-sm"
           >
             {novel.description}
           </p>
         </div>
       </div>
-      <div class="mt-4 flex gap-4 text-xs text-skin-base">
+      <div class="mt-4 flex flex-col gap-2 text-xs text-skin-base sm:text-sm">
         <div>
-          <span class="font-semibold">Author:</span>{" "}
+          <span class="font-semibold">Author:</span>
           {formatAuthor(novel.author)}
         </div>
         <div>
-          <span class="font-semibold">Chapters:</span>{" "}
-          {novel.total_chapters_count}
+          <span class="font-semibold">Last Read:</span> Chapter {
+            novel.chapter_number
+          } - {formatRelativeTime(novel.last_read_at)}
         </div>
         <div>
-          <span class="font-semibold">
-            {isLatestUpdate ? "Last Updated:" : "Added:"}
-          </span>{" "}
-          {
-            formatRelativeTime(
-              isLatestUpdate ? novel.last_chapter_date : novel.created_at
-            )
-          }
+          <span class="font-semibold">Last Read Date:</span>
+          {lastReadDate.toLocaleString()}
         </div>
-        {
-          novel.translation_status === "in_progress" && (
-            <div class="col-span-2 sm:col-span-3">
-              <span class="font-semibold">Status:</span>
-              <span class="rounded-full">Translating</span>
-            </div>
-          )
-        }
+        <a
+          href={`/novel/${novel.slug}/chapter/${novel.chapter_slug}`}
+          class="mt-2 inline-block w-fit rounded bg-skin-accent px-4 py-2 text-sm font-medium text-skin-base"
+        >
+          Continue Reading
+        </a>
       </div>
     </div>
   </div>
-</a>
+</div>

@@ -2,10 +2,12 @@ import type { APIRoute } from "astro";
 import { API_URL } from "@/constants/index";
 
 export const GET: APIRoute = async ({ params }) => {
-  const { id, number } = params;
+  const { novelSlug, chapterSlug } = params;
 
   try {
-    const response = await fetch(`${API_URL}/novel/${id}/chapter/${number}`);
+    const response = await fetch(
+      `${API_URL}/novel/${novelSlug}/chapter/${chapterSlug}`
+    );
 
     if (!response.ok) {
       return new Response(
@@ -21,16 +23,16 @@ export const GET: APIRoute = async ({ params }) => {
 
     const chapterData = await response.json();
 
-    const nextChapter = parseInt(number!) + 1;
+    const nextChapterSlug = chapterData.next_chapter_slug;
     const nextChapterResponse = await fetch(
-      `${API_URL}/novel/${id}/chapter/${nextChapter}`
+      `${API_URL}/novel/${novelSlug}/chapter/${nextChapterSlug}`
     );
     const hasNextChapter = nextChapterResponse.ok;
 
     return new Response(
       JSON.stringify({
         ...chapterData,
-        nextChapter: hasNextChapter ? nextChapter : null,
+        nextChapter: hasNextChapter ? nextChapterSlug : null,
       }),
       {
         status: 200,

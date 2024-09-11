@@ -2,22 +2,23 @@
 import Header from "@/components/Header.astro";
 import Layout from "@/layouts/Layout.astro";
 import { API_URL } from "@/constants/index";
-import ChapterSection from "@/components/preact/ChapterList";
+import ChapterSection from "@/components/react/ChapterList";
 import { Image } from "astro:assets";
 import { getSession } from "auth-astro/server";
 import axiosInstance from "@/lib/axios";
-import BookmarkButton from "@/components/preact/BookmarkButton";
-import formatRelativeTime from "@/lib/formatRelativeTime";
+import BookmarkButton from "@/components/react/BookmarkButton";
+import formatRelativeTime from "@/lib/format-time";
+import EpubDownload from "@/components/react/EpubDownload";
 
-const { id } = Astro.params;
+const { novelSlug } = Astro.params;
 
 const initialPage = parseInt(Astro.url.searchParams.get("page") || "1");
 const pageSize = 100;
 
 const session = await getSession(Astro.request);
 
-const getNovelData = async (id: string | undefined) => {
-  const res = await fetch(`${API_URL}/novel/${id}`);
+const getNovelData = async (novelSlug: string | undefined) => {
+  const res = await fetch(`${API_URL}/novel/${novelSlug}`);
   if (!res.ok) {
     return null;
   }
@@ -32,7 +33,7 @@ const getBookmarkStatus = async (id: string | undefined) => {
   try {
     const res = await axiosInstance.get(`/user/bookmark/${id}`, {
       headers: {
-        Authorization: `Bearer ${session.user?.token}`,
+        Authorization: `Bearer ${session.user?.access_token}`,
       },
     });
     return await res.data.bookmarked;
@@ -40,8 +41,8 @@ const getBookmarkStatus = async (id: string | undefined) => {
     return error;
   }
 };
-const bookmarkStatus = await getBookmarkStatus(id);
-const novel = await getNovelData(id);
+const novel = await getNovelData(novelSlug);
+const bookmarkStatus = await getBookmarkStatus(novel.id);
 if (!novel) {
   return Astro.redirect("/404");
 }
@@ -53,15 +54,15 @@ const novel_description = novel.description
 const title = `${novel.title.replace(/\b\w/g, (char: string) => char.toUpperCase())} | Webtales`;
 const description = novel_description.slice(0, 160);
 
-const getUserProgress = async (id: string | undefined) => {
+const getUserProgress = async (novelSlug: string | undefined) => {
   if (!session) {
     return null;
   }
 
   try {
-    const res = await axiosInstance.get(`/user/progress/${id}`, {
+    const res = await axiosInstance.get(`/user/progress/${novelSlug}`, {
       headers: {
-        Authorization: `Bearer ${session.user?.token}`,
+        Authorization: `Bearer ${session.user?.access_token}`,
       },
     });
     return await res.data;
@@ -70,12 +71,12 @@ const getUserProgress = async (id: string | undefined) => {
   }
 };
 
-const progress = await getUserProgress(id);
-const lastReadChapter = progress ? progress.chapter_id : null;
+const progress = await getUserProgress(novelSlug);
+const lastReadChapter = progress ? progress.chapter_slug : null;
 const lastRead = progress ? progress.last_read_at : null;
-const firstChapterUrl = `/novel/${id}/chapter/1`;
+const firstChapterUrl = `/novel/${novelSlug}/chapter/${novel.first_chapter_slug}`;
 const lastReadChapterUrl = lastReadChapter
-  ? `/novel/${id}/chapter/${lastReadChapter}`
+  ? `/novel/${novelSlug}/chapter/${lastReadChapter}`
   : firstChapterUrl;
 ---
 
@@ -127,7 +128,7 @@ const lastReadChapterUrl = lastReadChapter
           <BookmarkButton
             novelId={novel.id}
             status={bookmarkStatus}
-            client:only="preact"
+            client:load
           />
         </div>
         <span class="mb-4 mt-2 block text-sm text-skin-base opacity-80">
@@ -172,36 +173,24 @@ const lastReadChapterUrl = lastReadChapter
             </div>
             <button
               id="toggleDescription"
-              class="mt-2 text-skin-accent hover:underline"
+              class="my-2 text-skin-accent hover:underline"
             >
               Read more
             </button>
-            {
-              novel.epub_url === null ? (
-                <button
-                  id="generateEpubButton"
-                  data-id={id}
-                  class="mt-4 block text-skin-accent transition"
-                >
-                  Generate EPUB
-                </button>
-              ) : (
-                <a
-                  href={novel.epub_url}
-                  class="mt-4 block text-skin-accent hover:underline"
-                >
-                  Download EPUB
-                </a>
-              )
-            }
+            <EpubDownload
+              novelId={novel.id}
+              session={session}
+              epub_url={novel.epub_url}
+              client:load
+            />
           </div>
         </div>
       </div>
       <ChapterSection
-        id={id}
+        novelSlug={novelSlug}
         pageSize={pageSize}
         initialPage={initialPage}
-        client:only="preact"
+        client:load
       />
     </div>
   </div>

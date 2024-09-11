@@ -8,7 +8,7 @@ const NovelCard = ({ novel }: NovelCardProps) => {
   return (
     <a
       href={`/novel/${novel.ID}`}
-      className="relative block overflow-hidden rounded-xl bg-skin-card shadow-lg transition-all duration-300 hover:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]"
+      className="relative block overflow-hidden rounded-xl bg-skin-fill opacity-20 shadow-lg transition-all duration-300 hover:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]"
     >
       <div className="flex flex-col sm:flex-row">
         {novel.thumbnail && (

@@ -1,0 +1,56 @@
+---
+import AnnouncementCard from "@/components/AnnouncementCard.astro";
+import Header from "@/components/Header.astro";
+import Layout from "@/layouts/Layout.astro";
+import Main from "@/layouts/Main.astro";
+
+const announcements = [
+  {
+    id: "1",
+    title: "Introducing a New Feature: Bookmarks for Your Favorite Reads",
+    description:
+      "We're excited to announce a new bookmarks feature that allows you to save your favorite novels and chapters. This feature will help you easily return to your preferred content without having to search for it again. Start bookmarking now and enjoy a more personalized reading experience!",
+    // thumbnail: "/images/dark-mode.png",
+    createdAt: "2023-03-15T12:00:00.000Z",
+  },
+  {
+    id: "2",
+    title: "Track Your Progress with the New Reading History Feature",
+    description:
+      "I am excited to announce a new reading history feature that allows you to track your reading progress and history. This feature will keep a record of all the chapters and novels you've read, making it easier for you to pick up where you left off. Stay organized and never lose track of your reading journey!",
+    // thumbnail: "/images/performance.png",
+    createdAt: "2023-03-10T10:00:00.000Z",
+  },
+  {
+    id: "3",
+    title: "Enhanced Profile Navigation: Access More with a Click",
+    description:
+      "User can click on the profile image to show more navigation menu. This new feature enhances your profile navigation experience by providing quick access to additional options and settings. Explore your profile with ease and manage your account more efficiently!",
+    // thumbnail: "/images/community.png",
+    createdAt: "2023-03-05T14:00:00.000Z",
+  },
+  {
+    id: "4",
+    title: "New Mobile Navigation Menu: Seamless Navigation on the Go",
+    description:
+      "We're excited to announce a new mobile navigation menu that allows you to easily navigate the website on mobile devices. This feature is designed to provide a smooth and intuitive browsing experience, making it easier for you to access all the features and content on your mobile device. Enjoy seamless navigation wherever you are!",
+    // thumbnail: "/images/notifications.png",
+    createdAt: "2023-03-01T08:00:00.000Z",
+  },
+];
+---
+
+<Layout>
+  <Header />
+  <Main>
+    <h1 class="my-6 text-3xl font-bold">Announcements</h1>
+
+    <div class="md:grid-cols-2 lg:grid-cols-3 grid grid-cols-1 gap-6">
+      {
+        announcements.map(announcement => (
+          <AnnouncementCard announcement={announcement} />
+        ))
+      }
+    </div>
+  </Main>
+</Layout>

@@ -3,11 +3,11 @@ import { API_URL } from "@/constants/index";
 
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
-  const id = url.searchParams.get("id");
+  const novelSlug = url.searchParams.get("novelSlug");
   const page = url.searchParams.get("page");
   const pageSize = url.searchParams.get("pageSize");
 
-  if (!id || !page || !pageSize) {
+  if (!novelSlug || !page || !pageSize) {
     return new Response(
       JSON.stringify({ error: "Missing required parameters" }),
       {
@@ -21,7 +21,7 @@ export const GET: APIRoute = async ({ request }) => {
 
   try {
     const response = await fetch(
-      `${API_URL}/novel/${id}/paginate-chapters?page=${page}&pageSize=${pageSize}`
+      `${API_URL}/novel/${novelSlug}/paginate-chapters?page=${page}&pageSize=${pageSize}`
     );
     const data = await response.json();
 

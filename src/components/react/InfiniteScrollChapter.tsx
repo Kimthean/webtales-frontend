@@ -1,10 +1,9 @@
-import { h } from "preact";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import InfiniteScrollChapterContent from "./InfiniteScrollChapterContent";
 
 interface InfiniteScrollChapterProps {
-  novelId: string;
-  initialChapterNumber: string;
+  novelSlug: string;
+  initialChapterSlug: string;
 }
 
 export const InfiniteScrollChapter = (props: InfiniteScrollChapterProps) => {

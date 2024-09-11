@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "react";
 import Cookie from "js-cookie";
 
 const SettingsPanel = () => {
@@ -70,7 +70,7 @@ const SettingsPanel = () => {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="inline-block size-6"
+          className="inline-block size-6"
           viewBox="0 0 20 20"
           fill="currentColor"
         >

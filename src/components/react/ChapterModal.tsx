@@ -1,7 +1,7 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import ChapterList from "./ChapterList";
 
-function ChapterModal({ id }: { id: string }) {
+function ChapterModal({ novelSlug }: { novelSlug: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -23,15 +23,15 @@ function ChapterModal({ id }: { id: string }) {
   }, [open]);
 
   return (
-    <div class="relative">
+    <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        class="rounded-full bg-skin-card-muted p-2 opacity-50 transition-all"
+        className="rounded-full bg-skin-card-muted p-2 opacity-50 transition-all"
         aria-label="Toggle chapters"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
+          className="h-6 w-6"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -45,17 +45,17 @@ function ChapterModal({ id }: { id: string }) {
         </svg>
       </button>
       {open && (
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-skin-card p-4">
-            <div class="flex justify-end">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-skin-card p-4">
+            <div className="flex justify-end">
               <button
                 onClick={() => setOpen(false)}
-                class="text-skin-base hover:text-skin-accent"
+                className="text-skin-base hover:text-skin-accent"
                 aria-label="Close chapters"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
+                  className="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -69,7 +69,7 @@ function ChapterModal({ id }: { id: string }) {
                 </svg>
               </button>
             </div>
-            <ChapterList id={id} pageSize={100} initialPage={1} />
+            <ChapterList novelSlug={novelSlug} pageSize={100} initialPage={1} />
           </div>
         </div>
       )}

@@ -33,6 +33,18 @@
     opacity: 0.2;
   }
 
+  .bg-noise {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    background: url("/noise.jpeg") repeat center;
+    opacity: 0.2;
+  }
+
   html[data-theme="light"] body::before {
     opacity: 0.05;
     mix-blend-mode: multiply;
@@ -133,20 +145,13 @@
   .focus-outline {
     @apply outline-2 outline-offset-1 outline-skin-fill focus-visible:no-underline focus-visible:outline-dashed;
   }
-  .bg-noise {
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    right: -50%;
-    bottom: -50%;
-    width: 200%;
-    height: 200%;
-    background: transparent
-      url("http://assets.iceable.com/img/noise-transparent.png") repeat 0 0;
-    background-repeat: repeat;
-    animation: bg-animation 0.2s infinite;
-    opacity: 0.9;
-    visibility: visible;
-    z-index: -1;
-  }
 }
+
+/* @layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+} */

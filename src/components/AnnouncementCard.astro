@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+
+interface Announcement {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail?: string;
+  createdAt: string;
+}
+
+interface AnnouncementCardProps {
+  announcement: Announcement;
+}
+
+const { announcement } = Astro.props as AnnouncementCardProps;
+---
+
+<div class="overflow-hidden rounded-lg bg-skin-card shadow-md">
+  <div class="block">
+    {
+      announcement.thumbnail && (
+        <Image
+          src={announcement.thumbnail}
+          alt={`Thumbnail for ${announcement.title}`}
+          class="h-48 w-full object-cover"
+          inferSize
+        />
+      )
+    }
+    <div class="p-4">
+      <h2 class="mb-2 text-xl font-semibold">{announcement.title}</h2>
+      <p class="mb-4 text-sm">{announcement.description}</p>
+      <div class="flex items-center justify-between">
+        <span class="text-xs text-gray-500"
+          >Posted on {
+            new Date(announcement.createdAt).toLocaleDateString()
+          }</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

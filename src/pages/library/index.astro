@@ -6,6 +6,7 @@ import Main from "@/layouts/Main.astro";
 import Pagination from "@/components/Pagination.astro";
 import { API_URL } from "@/constants/index";
 import type { Novel } from "@/types/novel";
+import DiscordAd from "@/components/DiscordAd.astro";
 
 const currentPage = parseInt(Astro.url.searchParams.get("page") || "1");
 const limit = 15;
@@ -24,15 +25,7 @@ const nextUrl = currentPage < totalPages ? `?page=${currentPage + 1}` : "";
 <Layout>
   <Header activeNav="library" />
   <Main>
-    <div
-      class="mt-4 border-l-4 border-yellow-500 bg-yellow-100 p-4 text-yellow-700"
-    >
-      <p class="font-bold">Work in Progress</p>
-      <p>
-        Note: This site is currently under development and may contain errors or
-        inconsistencies between novels.
-      </p>
-    </div>
+    <DiscordAd />
     <div class="flex flex-col py-8">
       <h2 class="pb-8 text-xl font-bold">All Novels</h2>
       <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">

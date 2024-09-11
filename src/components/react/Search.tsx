@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "preact/hooks";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Fuse from "fuse.js";
 import NovelCard from "./NovelCard";
 

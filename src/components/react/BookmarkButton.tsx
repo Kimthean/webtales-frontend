@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState } from "react";
 import axiosInstance from "@/lib/axios";
 
 interface BookmarkButtonProps {
@@ -40,7 +40,7 @@ const BookmarkButton = ({ novelId, status }: BookmarkButtonProps) => {
   return (
     <button
       onClick={handleToggleBookmark}
-      class="hover:bg-skin-accent-hover rounded-md bg-skin-accent px-3 py-1 text-xs text-skin-inverted transition sm:px-5 sm:py-2 sm:text-sm"
+      className="hover:bg-skin-accent-hover rounded-md bg-skin-accent px-3 py-1 text-xs text-skin-inverted transition sm:px-5 sm:py-2 sm:text-sm"
       disabled={loading || isBookmarked === null}
     >
       {renderButtonContent()}
