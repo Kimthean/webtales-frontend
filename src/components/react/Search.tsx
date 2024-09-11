@@ -1,24 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import Fuse from "fuse.js";
 import NovelCard from "./NovelCard";
-
-export interface Novel {
-  ID: number;
-  CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string | null;
-  title: string;
-  raw_title: string;
-  thumbnail: string;
-  author: string;
-  description: string;
-  last_chapter_title: string;
-  last_chapter_number: number;
-  total_chapters_count: number;
-  status: {
-    status: string;
-  };
-}
+import type { Novel } from "@/types/novel";
 
 interface Props {
   NovelList: Novel[];
@@ -112,7 +95,7 @@ function SearchBar({ NovelList }: Props) {
 
       <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6 pt-4 max-sm:px-4">
         {searchResults?.map(({ item: novel }) => (
-          <NovelCard key={novel.ID} novel={novel} />
+          <NovelCard key={novel.id} novel={novel} />
         ))}
       </div>
     </>

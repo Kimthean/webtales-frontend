@@ -3,7 +3,6 @@ import type { Novel } from "@/types/novel";
 
 interface NovelCardProps {
   novel: Novel;
-  isLatestUpdate: boolean;
 }
 
 function formatTitle(title: string): string {
@@ -20,7 +19,7 @@ function formatAuthor(author: string): string {
     : "Unknown";
 }
 
-const NovelCard = ({ novel, isLatestUpdate }: NovelCardProps) => {
+const NovelCard = ({ novel }: NovelCardProps) => {
   return (
     <a
       href={`/novel/${novel.slug}`}
@@ -58,12 +57,8 @@ const NovelCard = ({ novel, isLatestUpdate }: NovelCardProps) => {
               {novel.total_chapters_count}
             </div>
             <div>
-              <span className="font-semibold">
-                {isLatestUpdate ? "Last Updated:" : "Added:"}
-              </span>{" "}
-              {formatRelativeTime(
-                isLatestUpdate ? novel.last_chapter_date : novel.created_at
-              )}
+              <span className="font-semibold">Added:</span>{" "}
+              {formatRelativeTime(novel.created_at)}
             </div>
             {novel.translation_status === "in_progress" && (
               <div className="col-span-2 sm:col-span-3">
