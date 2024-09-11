@@ -9,7 +9,7 @@ interface Props {
   novel_name: string;
 }
 
-const { id } = Astro.params;
+const { novelSlug } = Astro.params;
 
 const { chapter_title, novel_name } = Astro.props;
 ---
@@ -35,7 +35,7 @@ const { chapter_title, novel_name } = Astro.props;
       <SettingsPanel client:only="react" />
     </div>
     <div>
-      <ChapterModal id={id || ""} client:only="react" />
+      <ChapterModal novelSlug={novelSlug!} client:only="react" />
     </div>
   </div>
 </Layout>
