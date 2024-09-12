@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import { Icon } from "astro-icon/components";
+import { SignInForm } from "@/components/react/SignInForm";
 ---
 
 <Layout title="Login">
@@ -12,73 +13,13 @@ import { Icon } from "astro-icon/components";
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account
         </h2>
-        <form id="login-form" class="mt-8 space-y-6">
-          <div class="-space-y-px rounded-md shadow-sm">
-            <div>
-              <label for="email" class="sr-only">Email address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                required
-                class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                placeholder="Email address"
-              />
-            </div>
-            <div>
-              <label for="password" class="sr-only">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                required
-                class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                placeholder="Password"
-              />
-            </div>
-          </div>
-          <div id="error-message" class="text-sm text-red-500"></div>
 
-          <div class="items-center">
-            <!-- <div class="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-              />
-              <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div> -->
-
-            <div class="text-sm">
-              <a
-                href="#"
-                class="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot your password?
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              id="login-button"
-              class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Sign in
-            </button>
-          </div>
-        </form>
+        <SignInForm client:load />
         <div class="pt-4">
           <button
             type="button"
             id="google-button"
-            class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="flex w-full items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-white"
           >
             <Icon name="google" class="mr-2 h-5 w-5" />
             Google
@@ -112,31 +53,6 @@ import { Icon } from "astro-icon/components";
   <script>
     import { signIn } from "auth-astro/client";
 
-    document
-      .getElementById("login-form")
-      ?.addEventListener("submit", async e => {
-        e.preventDefault();
-        const email = (document.getElementById("email") as HTMLInputElement)
-          ?.value;
-        const password = (
-          document.getElementById("password") as HTMLInputElement
-        )?.value;
-        const errorMessageElement = document.getElementById("error-message");
-
-        const result = await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        });
-        const json = (await result?.json()) as { url?: string };
-        if (json?.url?.includes("?")) {
-          if (errorMessageElement) {
-            errorMessageElement.textContent = "Invalid email or password.";
-          }
-        } else {
-          window.location.href = "/";
-        }
-      });
     const googleButton = document.getElementById("google-button");
     googleButton?.addEventListener("click", async () => {
       await signIn("google", { redirect: true });

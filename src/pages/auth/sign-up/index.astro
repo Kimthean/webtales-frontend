@@ -26,7 +26,7 @@ if (Astro.request.method === "POST") {
 
       const json = await res.json();
       if (json.message === "Register success") {
-        return Astro.redirect("/auth/sign-in");
+        return await Astro.redirect("/auth/sign-in");
       } else {
         errorMessage = json.message;
       }
