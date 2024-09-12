@@ -1,6 +1,3 @@
-// SignInForm.tsx
-
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,7 +15,7 @@ import { signIn } from "auth-astro/client";
 
 const signInSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(6, "Password must be at least 8 characters"),
 });
 
 type SignInFormData = z.infer<typeof signInSchema>;
