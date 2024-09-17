@@ -9,8 +9,8 @@ const { novelSlug, chapterSlug } = Astro.params;
 const session = await getSession(Astro.request);
 
 const getChapterData = async (
-  id: string | undefined,
-  chapterNumber: string | undefined
+  novelSlug: string | undefined,
+  chapterSlug: string | undefined
 ) => {
   const res = await fetch(
     `${API_URL}/novel/${novelSlug}/chapter/${chapterSlug}`
@@ -202,7 +202,7 @@ const isInfiniteScrollEnabled =
     </div>
   </div>
 </ChapterLayout>
-<!-- <script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
+<script is:inline define:vars={{ prevChapterUrl, nextChapterUrl }}>
   function handleKeyPress(event) {
     if (event.key === "ArrowLeft" && prevChapterUrl) {
       loadPreferences();
@@ -213,32 +213,12 @@ const isInfiniteScrollEnabled =
     }
   }
 
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-    return null;
-  }
-
-  function loadPreferences() {
-    const fontSize = getCookie("readerFontSize") || "16";
-    const fontWeight = getCookie("readerFontWeight") || "400";
-    const fontFamily =
-      getCookie("readerFontFamily") || "'IBM Plex Mono', monospace";
-
-    document.documentElement.style.setProperty("--font-size", `${fontSize}px`);
-    document.documentElement.style.setProperty("--font-weight", fontWeight);
-    document.documentElement.style.setProperty("--font-family", fontFamily);
-  }
-
-  loadPreferences();
-
   document.addEventListener("keydown", handleKeyPress);
 
   document.addEventListener("astro:before-swap", () => {
     document.removeEventListener("keydown", handleKeyPress);
   });
-</script> -->
+</script>
 
 <style is:global>
   :root {
