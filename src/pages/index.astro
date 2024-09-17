@@ -48,7 +48,7 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
           </svg>
         </LinkButton>
       </div>
-      <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
+      <div class="mx-auto grid w-full grid-cols-1 gap-6">
         {
           latestAdded.map((novel: any) => (
             <NovelCard novel={novel} isLatestUpdate={false} />
@@ -77,7 +77,7 @@ const { latestAdded, latestUpdated } = await fetchLatestNovels();
           </svg>
         </LinkButton>
       </div>
-      <div class="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6">
+      <div class="mx-auto grid w-full grid-cols-1 gap-6">
         {
           latestUpdated.map((novel: any) => (
             <NovelCard novel={novel} isLatestUpdate={true} />

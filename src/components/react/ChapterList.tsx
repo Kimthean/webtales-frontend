@@ -59,7 +59,7 @@ const ChapterList = ({
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl rounded-lg bg-skin-card p-4 sm:p-6">
+    <div className="mx-auto w-full rounded-lg bg-skin-card p-4 sm:p-6">
       <h2 className="mb-4 text-xl font-semibold text-skin-base sm:text-2xl">
         Chapters
       </h2>

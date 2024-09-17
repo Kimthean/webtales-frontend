@@ -23,10 +23,8 @@ const { chapter_title, novel_name } = Astro.props;
     <div class="progress-bar h-1 w-0 bg-skin-accent" id="myBar"></div>
   </div>
 
-  <main class="mx-auto w-full max-w-3xl px-4 pb-8">
-    <div class="mx-auto flex w-full max-w-3xl justify-start">
-      <slot />
-    </div>
+  <main class="mx-auto w-full max-w-5xl px-4 pb-8">
+    <slot />
   </main>
   <div
     class="z-9999 fixed bottom-16 right-4 flex flex-col space-y-2 sm:bottom-32"

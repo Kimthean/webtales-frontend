@@ -46,7 +46,7 @@ function ChapterModal({ novelSlug }: { novelSlug: string }) {
       </button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-skin-card p-4">
+          <div className="max-h-[90vh] w-full overflow-y-auto rounded-lg bg-skin-card p-4">
             <div className="flex justify-end">
               <button
                 onClick={() => setOpen(false)}

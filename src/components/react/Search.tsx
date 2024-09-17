@@ -93,7 +93,7 @@ function SearchBar({ NovelList }: Props) {
         </div>
       )}
 
-      <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-6 pt-4 max-sm:px-4">
+      <div className="mx-auto grid w-full grid-cols-1 gap-6 pt-4 max-sm:px-4">
         {searchResults?.map(({ item: novel }) => (
           <NovelCard key={novel.id} novel={novel} />
         ))}
