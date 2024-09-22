@@ -55,7 +55,7 @@ import { SignInForm } from "@/components/react/SignInForm";
 
     const googleButton = document.getElementById("google-button");
     googleButton?.addEventListener("click", async () => {
-      await signIn("google", { redirect: true });
+      await signIn("google", { callbackUrl: "/" });
     });
   </script>
 </Layout>

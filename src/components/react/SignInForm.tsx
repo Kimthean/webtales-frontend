@@ -37,7 +37,6 @@ export function SignInForm() {
     });
 
     const json = (await result?.json()) as { url?: string };
-    console.log(json);
     if (json?.url?.includes("?")) {
       form.setError("email", {
         type: "manual",
