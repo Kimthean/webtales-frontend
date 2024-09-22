@@ -21,14 +21,6 @@ const getChapterData = async (
   return await res.json();
 };
 
-const getChapterStats = async (novelSlug: string | undefined) => {
-  const res = await fetch(`${API_URL}/novel/chapters-stats/${novelSlug}`);
-  if (!res.ok) {
-    return null;
-  }
-  return await res.json();
-};
-
 const updateUserProgress = async (
   novelSlug: string | undefined,
   chapterSlug: string | undefined
@@ -46,16 +38,13 @@ const updateUserProgress = async (
 };
 
 const chapter = await getChapterData(novelSlug, chapterSlug);
-const chapterStats = await getChapterStats(novelSlug);
 if (session && chapter) {
   await updateUserProgress(novelSlug, chapterSlug);
 }
 
-if (!chapter || !chapterStats) {
+if (!chapter) {
   return Astro.redirect("/404");
 }
-
-const totalChapters = chapterStats.total_chapters;
 
 const paragraphs = chapter.translated_content
   .split("\n\n")
@@ -131,7 +120,7 @@ const isInfiniteScrollEnabled =
               </LinkButton>
 
               <span class="text-gray-400 max-sm:hidden">
-                Chapter {chapter.number} of {totalChapters}
+                {/* Chapter {chapter.number} of {totalChapters} */}
               </span>
 
               <LinkButton
@@ -157,9 +146,9 @@ const isInfiniteScrollEnabled =
               ))}
             </div>
             <div class="flex items-center justify-center pt-8 sm:hidden">
-              <span class="text-gray-400">
+              {/* <span class="text-gray-400">
                 Chapter {chapter.number} of {totalChapters}
-              </span>
+              </span> */}
             </div>
             <div class="mt-8 flex items-center justify-between">
               <LinkButton
@@ -178,7 +167,7 @@ const isInfiniteScrollEnabled =
               </LinkButton>
 
               <span class="text-gray-400 max-sm:hidden">
-                Chapter {chapter.number} of {totalChapters}
+                {/* Chapter {chapter.number} of {totalChapters} */}
               </span>
 
               <LinkButton
